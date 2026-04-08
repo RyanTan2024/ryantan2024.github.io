@@ -37,6 +37,14 @@
         </div>
     </footer>
     
+    <!-- 照片放大模态框 -->
+    <div id="photo-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modal-img" src="" alt="">
+        </div>
+    </div>
+    
     <script>
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -102,11 +110,11 @@
                 const journalItem = document.createElement('div');
                 journalItem.className = 'journal-item';
                 
-                // 日期 - 只显示年和月
+                // 日期 - 显示为MM/YYYY格式
                 const date = new Date(item.date);
                 const year = date.getFullYear();
                 const month = String(date.getMonth() + 1).padStart(2, '0');
-                const formattedDate = `${year}-${month}`;
+                const formattedDate = `${month}/${year}`;
                 const dateHTML = `
                     <div class="journal-header">
                         <div class="journal-date">${formattedDate}</div>
@@ -124,12 +132,11 @@
                 let photosHTML = '';
                 if (item.photo) {
                     photosHTML = '<div class="journal-gallery">';
+                    // 尝试多种图片路径格式
+                    const photoPath = item.photo;
                     photosHTML += `
                         <div class="gallery-item">
-                            <img src="${item.photo}" alt="${item.title}">
-                            <div class="gallery-overlay">
-                                <div class="gallery-caption">${item.title}</div>
-                            </div>
+                            <img src="${photoPath}" alt="${item.title}" onclick="openPhotoModal('${photoPath}', '${item.title}')">
                         </div>
                     `;
                     photosHTML += '</div>';
@@ -138,12 +145,10 @@
                 else if (item.photos && item.photos.length > 0) {
                     photosHTML = '<div class="journal-gallery">';
                     item.photos.forEach(photo => {
+                        const photoSrc = photo.src || photo;
                         photosHTML += `
                             <div class="gallery-item">
-                                <img src="${photo.src || photo}" alt="${item.title}">
-                                <div class="gallery-overlay">
-                                    <div class="gallery-caption">${item.title}</div>
-                                </div>
+                                <img src="${photoSrc}" alt="${item.title}" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
                             </div>
                         `;
                     });
@@ -160,6 +165,10 @@
                 images.forEach(img => {
                     img.classList.add('loaded');
                 });
+                
+                // 触发自定义事件，通知照片模态框设置点击事件
+                console.log('Journal items rendered, triggering event');
+                window.dispatchEvent(new Event('journalItemsRendered'));
             }, 100);
         }
         
@@ -173,11 +182,56 @@
             document.getElementById('clustrmap-container').appendChild(script);
         }
         
+        // 全局照片放大函数
+        function openPhotoModal(src, alt) {
+            const modal = document.getElementById('photo-modal');
+            const modalImg = document.getElementById('modal-img');
+            console.log('Opening photo modal:', src);
+            modal.style.display = 'block';
+            modalImg.src = src;
+            modalImg.alt = alt;
+        }
+        
+        // 照片放大功能
+        function setupPhotoModal() {
+            const modal = document.getElementById('photo-modal');
+            
+            console.log('Photo modal setup started');
+            console.log('Modal element:', modal);
+            
+            // 关闭模态框
+            const closeBtn = document.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    console.log('Close button clicked');
+                    modal.style.display = 'none';
+                });
+            }
+            
+            // 点击模态框外部关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    console.log('Modal background clicked');
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // 按ESC键关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    console.log('Escape key pressed');
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
         // 页面加载时加载数据
         window.addEventListener('load', function() {
             loadJournalData();
             // 延迟加载clustrmaps，避免与其他资源竞争
             setTimeout(loadClustrmaps, 1000);
+            // 设置照片放大功能
+            setupPhotoModal();
         });
     </script>
 </body>

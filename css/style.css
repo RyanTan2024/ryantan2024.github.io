@@ -76,48 +76,52 @@ body {
 }
 
 .journal-item {
-    background-color: var(--card-color);
-    border-radius: 4px;
-    padding: 0.8rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    transition: all 0.4s ease;
-    border-left: 2px solid var(--primary-color);
-    min-height: 220px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    border: 1px solid #f0f0f0;
 }
 
 .journal-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
 .journal-header {
     margin-bottom: 0.5rem;
+    position: relative;
 }
 
 .journal-date {
-    font-weight: 500;
-    color: var(--primary-color);
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    font-weight: 600;
+    color: #e74c3c;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .journal-content {
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
     line-height: 1.4;
-    color: var(--gray-color);
+    color: #333;
     flex: 1;
+    padding-top: 1.2rem;
 }
 
 .journal-content p {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 400;
     letter-spacing: 0.5px;
+    line-height: 1.6;
 }
 
 /* 日记中的照片画廊 */
@@ -125,31 +129,33 @@ body {
     display: flex;
     gap: 0.3rem;
     flex-wrap: wrap;
-    margin-top: 0.6rem;
+    margin-top: 0.5rem;
 }
 
 .journal-gallery .gallery-item {
     flex: 1 1 100%;
     min-width: 100%;
-    height: 120px;
+    height: 140px;
     position: relative;
-    border-radius: 0;
+    border-radius: 8px;
     overflow: hidden;
     transition: all 0.4s ease;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .journal-gallery .gallery-item:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .journal-gallery .gallery-item img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    background-color: #f0f0f0;
+    object-fit: cover;
     transition: all 0.6s ease;
     opacity: 0;
-    transform: scale(1);
+    transform: scale(1.05);
 }
 
 .journal-gallery .gallery-item img.loaded {
@@ -158,29 +164,12 @@ body {
 }
 
 .journal-gallery .gallery-item:hover img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
+/* 移除图片悬停时的文字覆盖层 */
 .journal-gallery .gallery-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.6));
-    color: white;
-    padding: 1rem 0.6rem 0.6rem;
-    transform: translateY(100%);
-    transition: all 0.4s ease;
-}
-
-.journal-gallery .gallery-item:hover .gallery-overlay {
-    transform: translateY(0);
-}
-
-.journal-gallery .gallery-caption {
-    font-size: 0.7rem;
-    font-weight: 300;
-    letter-spacing: 1px;
+    display: none;
 }
 
 /* 页脚样式 */
@@ -358,4 +347,72 @@ img {
 /* 全局过渡效果 */
 * {
     transition: all 0.3s ease;
+}
+
+/* 照片放大模态框 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    position: relative;
+    margin: 10% auto;
+    padding: 0;
+    width: 90%;
+    max-width: 800px;
+    animation: zoomIn 0.3s ease;
+}
+
+.modal-content img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 80vh;
+}
+
+.close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* 点击图片效果 */
+.journal-gallery .gallery-item {
+    cursor: pointer;
+}
+
+.journal-gallery .gallery-item:hover {
+    transform: scale(1.02);
 }
