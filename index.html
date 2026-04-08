@@ -48,22 +48,41 @@
             });
         });
         
+        // 内联数据作为备选（与外部JSON格式一致）
+        const fallbackData = [
+            {
+                "date": "2024-07-25",
+                "title": "我出生了",
+                "photos": [
+                    {
+                        "src": "photos/202407.JPG"
+                    }
+                ]
+            }
+        ];
+        
         // 加载日记数据
         async function loadJournalData() {
             try {
+                console.log('开始加载journal.json...');
                 const response = await fetch('journal.json');
+                console.log('HTTP状态:', response.status);
                 if (!response.ok) {
-                    throw new Error('Failed to load journal data');
+                    throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
+                console.log('成功加载JSON数据:', data);
                 
                 // 按日期降序排序，最新的在前面
                 data.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
                 renderJournalItems(data);
             } catch (error) {
-                console.error('Error loading journal data:', error);
-                document.getElementById('journal-container').innerHTML = '<p>加载日记数据失败</p>';
+                console.error('加载日记数据失败:', error);
+                console.log('使用内联备选数据');
+                // 使用内联数据作为备选
+                fallbackData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                renderJournalItems(fallbackData);
             }
         }
         
@@ -87,23 +106,23 @@
                     </div>
                 `;
                 
-                // 内容
+                // 内容 - 使用title字段
                 const contentHTML = `
                     <div class="journal-content">
-                        <p>${item.content}</p>
+                        <p>${item.title}</p>
                     </div>
                 `;
                 
-                // 照片
+                // 照片 - 使用title字段作为alt和caption
                 let photosHTML = '';
                 if (item.photos && item.photos.length > 0) {
                     photosHTML = '<div class="journal-gallery">';
                     item.photos.forEach(photo => {
                         photosHTML += `
                             <div class="gallery-item">
-                                <img src="${photo.src}" alt="${photo.alt}">
+                                <img src="${photo.src}" alt="${item.title}">
                                 <div class="gallery-overlay">
-                                    <div class="gallery-caption">${photo.caption}</div>
+                                    <div class="gallery-caption">${item.title}</div>
                                 </div>
                             </div>
                         `;

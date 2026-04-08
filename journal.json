@@ -1,13 +1,19 @@
 [
     {
-        "id": 1,
         "date": "2024-07-25",
-        "content": "我出生了",
+        "title": "我出生了",
         "photos": [
             {
-                "src": "photos/202407.JPG",
-                "alt": "我出生了",
-                "caption": "我出生了"
+                "src": "photos/202407.JPG"
+            }
+        ]
+    },
+    {
+        "date": "2024-07-25",
+        "title": "我出生了",
+        "photos": [
+            {
+                "src": "photos/202407.JPG"
             }
         ]
     }
