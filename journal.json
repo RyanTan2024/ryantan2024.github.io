@@ -2,19 +2,6 @@
     {
         "date": "2024-07-25",
         "title": "我出生了",
-        "photos": [
-            {
-                "src": "photos/202407.JPG"
-            }
-        ]
-    },
-    {
-        "date": "2024-07-25",
-        "title": "我出生了",
-        "photos": [
-            {
-                "src": "photos/202407.JPG"
-            }
-        ]
+        "photo": "photos/202407.JPG"
     }
 ]

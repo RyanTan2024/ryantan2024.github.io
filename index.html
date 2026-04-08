@@ -122,12 +122,25 @@
                 
                 // 照片 - 使用title字段作为alt和caption
                 let photosHTML = '';
-                if (item.photos && item.photos.length > 0) {
+                if (item.photo) {
+                    photosHTML = '<div class="journal-gallery">';
+                    photosHTML += `
+                        <div class="gallery-item">
+                            <img src="${item.photo}" alt="${item.title}">
+                            <div class="gallery-overlay">
+                                <div class="gallery-caption">${item.title}</div>
+                            </div>
+                        </div>
+                    `;
+                    photosHTML += '</div>';
+                }
+                // 兼容旧格式（photos数组）
+                else if (item.photos && item.photos.length > 0) {
                     photosHTML = '<div class="journal-gallery">';
                     item.photos.forEach(photo => {
                         photosHTML += `
                             <div class="gallery-item">
-                                <img src="${photo.src}" alt="${item.title}">
+                                <img src="${photo.src || photo}" alt="${item.title}">
                                 <div class="gallery-overlay">
                                     <div class="gallery-caption">${item.title}</div>
                                 </div>
