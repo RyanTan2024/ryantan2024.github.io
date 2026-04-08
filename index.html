@@ -3,121 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="儿子的个人主页，记录日常照片和日记">
-    <title>宝贝成长记录</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="谭燃 Ryan Tan 的个人主页，记录成长点滴">
+    <title>谭燃 Ryan Tan</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="hero">
-        <div class="hero-content">
-            <h1>宝贝成长记录</h1>
-            <p>记录每一个珍贵的瞬间</p>
-            <div class="hero-buttons">
-                <a href="#diary" class="btn btn-primary">成长日记</a>
-                <a href="#gallery" class="btn btn-secondary">照片墙</a>
+        <div class="container">
+            <div class="hero-content">
+                <h1>谭燃 (Ryan TAN)</h1>
             </div>
         </div>
     </header>
     
     <main>
-        <section id="diary" class="diary-section">
+        <section id="journal" class="journal-section">
             <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-book"></i> 成长日记
-                </h2>
-                <div class="diary-container">
-                    <div class="diary-item">
-                        <div class="diary-header">
-                            <div class="diary-date">2026-04-08</div>
-                            <div class="diary-icon">
-                                <i class="fas fa-bicycle"></i>
-                            </div>
-                        </div>
-                        <div class="diary-content">
-                            今天学会了骑自行车，虽然摔了几次，但终于成功了！感觉自己像个小勇士，下次要挑战更远的距离。
-                        </div>
-                        <div class="diary-photos">
-                            <img src="photos/bike.jpg" alt="骑自行车">
-                        </div>
-                    </div>
-                    <div class="diary-item">
-                        <div class="diary-header">
-                            <div class="diary-date">2026-04-05</div>
-                            <div class="diary-icon">
-                                <i class="fas fa-paw"></i>
-                            </div>
-                        </div>
-                        <div class="diary-content">
-                            第一次去动物园，看到了大象和长颈鹿，非常开心！最喜欢看小猴子在树上跳来跳去，太可爱了。
-                        </div>
-                        <div class="diary-photos">
-                            <img src="photos/zoo.jpg" alt="动物园">
-                        </div>
-                    </div>
-                    <div class="diary-item">
-                        <div class="diary-header">
-                            <div class="diary-date">2026-04-01</div>
-                            <div class="diary-icon">
-                                <i class="fas fa-wind"></i>
-                            </div>
-                        </div>
-                        <div class="diary-content">
-                            幼儿园的春游活动，和小朋友们一起放风筝，玩得很开心。我的风筝飞得最高，老师还表扬了我呢！
-                        </div>
-                        <div class="diary-photos">
-                            <img src="photos/spring-outing.jpg" alt="春游">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="gallery" class="photo-gallery">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-images"></i> 照片墙
-                </h2>
-                <div class="gallery-container">
-                    <div class="gallery-item">
-                        <img src="photos/photo1.jpg" alt="照片1">
-                        <div class="gallery-overlay">
-                            <div class="gallery-caption">快乐时光</div>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="photos/photo2.jpg" alt="照片2">
-                        <div class="gallery-overlay">
-                            <div class="gallery-caption">成长瞬间</div>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="photos/photo3.jpg" alt="照片3">
-                        <div class="gallery-overlay">
-                            <div class="gallery-caption">户外活动</div>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="photos/photo4.jpg" alt="照片4">
-                        <div class="gallery-overlay">
-                            <div class="gallery-caption">家庭时光</div>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="photos/photo5.jpg" alt="照片5">
-                        <div class="gallery-overlay">
-                            <div class="gallery-caption">学习时刻</div>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="photos/photo6.jpg" alt="照片6">
-                        <div class="gallery-overlay">
-                            <div class="gallery-caption">友谊万岁</div>
-                        </div>
-                    </div>
+                <h2 class="section-title"></h2>
+                <div class="journal-container" id="journal-container">
+                    <!-- 动态生成的日记内容 -->
                 </div>
             </div>
         </section>
@@ -125,19 +29,8 @@
     
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <h3>宝贝成长记录</h3>
-                    <p>记录每一个珍贵的瞬间</p>
-                </div>
-                <div class="footer-social">
-                    <a href="#" class="social-icon"><i class="fab fa-weixin"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-weibo"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-qq"></i></a>
-                </div>
-            </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 宝贝成长记录 | 用心记录每一个成长瞬间</p>
+                <p>&copy; 2026 谭燃 Ryan Tan</p>
             </div>
         </div>
     </footer>
@@ -153,12 +46,85 @@
             });
         });
         
-        // 图片加载动画
-        window.addEventListener('load', function() {
-            const images = document.querySelectorAll('img');
-            images.forEach(img => {
-                img.classList.add('loaded');
+        // 加载日记数据
+        async function loadJournalData() {
+            try {
+                const response = await fetch('journal.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load journal data');
+                }
+                const data = await response.json();
+                
+                // 按日期降序排序，最新的在前面
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                renderJournalItems(data);
+            } catch (error) {
+                console.error('Error loading journal data:', error);
+                document.getElementById('journal-container').innerHTML = '<p>加载日记数据失败</p>';
+            }
+        }
+        
+        // 渲染日记项目
+        function renderJournalItems(items) {
+            const container = document.getElementById('journal-container');
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const journalItem = document.createElement('div');
+                journalItem.className = 'journal-item';
+                
+                // 日期 - 只显示年和月
+                const date = new Date(item.date);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const formattedDate = `${year}-${month}`;
+                const dateHTML = `
+                    <div class="journal-header">
+                        <div class="journal-date">${formattedDate}</div>
+                    </div>
+                `;
+                
+                // 内容
+                const contentHTML = `
+                    <div class="journal-content">
+                        <p>${item.content}</p>
+                    </div>
+                `;
+                
+                // 照片
+                let photosHTML = '';
+                if (item.photos && item.photos.length > 0) {
+                    photosHTML = '<div class="journal-gallery">';
+                    item.photos.forEach(photo => {
+                        photosHTML += `
+                            <div class="gallery-item">
+                                <img src="${photo.src}" alt="${photo.alt}">
+                                <div class="gallery-overlay">
+                                    <div class="gallery-caption">${photo.caption}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    photosHTML += '</div>';
+                }
+                
+                journalItem.innerHTML = dateHTML + contentHTML + photosHTML;
+                container.appendChild(journalItem);
             });
+            
+            // 触发图片加载动画
+            setTimeout(() => {
+                const images = document.querySelectorAll('img');
+                images.forEach(img => {
+                    img.classList.add('loaded');
+                });
+            }, 100);
+        }
+        
+        // 页面加载时加载数据
+        window.addEventListener('load', function() {
+            loadJournalData();
         });
     </script>
 </body>
