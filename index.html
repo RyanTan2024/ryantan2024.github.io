@@ -30,8 +30,7 @@
     <footer>
         <div class="container">
             <div class="footer-bottom">
-                <div id="clustrmap-container" style="width: 80px; overflow: hidden; margin: auto;">
-                  <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=36XM6SUwMq187cRMN1Rp0rZwVquvjcxOtq7lv2iecm4"></script>
+                <div id="clustrmap-container" style="width: 80px; overflow: hidden; margin: auto; transition: none;">
                 </div>
                 <p>&copy; 2026 谭燃 Ryan Tan</p>
             </div>
@@ -125,9 +124,21 @@
             }, 100);
         }
         
+        // 动态加载clustrmaps脚本
+        function loadClustrmaps() {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.id = 'clstr_globe';
+            script.src = '//clustrmaps.com/globe.js?d=36XM6SUwMq187cRMN1Rp0rZwVquvjcxOtq7lv2iecm4';
+            script.async = true;
+            document.getElementById('clustrmap-container').appendChild(script);
+        }
+        
         // 页面加载时加载数据
         window.addEventListener('load', function() {
             loadJournalData();
+            // 延迟加载clustrmaps，避免与其他资源竞争
+            setTimeout(loadClustrmaps, 1000);
         });
     </script>
 </body>
