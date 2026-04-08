@@ -151,15 +151,7 @@
             }, 100);
         }
         
-        // 动态加载clustrmaps脚本
-        function loadClustrmaps() {
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.id = 'clstr_globe';
-            script.src = '//clustrmaps.com/globe.js?d=36XM6SUwMq187cRMN1Rp0rZwVquvjcxOtq7lv2iecm4';
-            script.async = true;
-            document.getElementById('clustrmap-container').appendChild(script);
-        }
+        
         
         // 全局照片放大函数
         function openPhotoModal(src, alt) {
@@ -207,8 +199,6 @@
         // 页面加载时加载数据
         window.addEventListener('load', function() {
             loadJournalData();
-            // 延迟加载clustrmaps，避免与其他资源竞争
-            setTimeout(loadClustrmaps, 1000);
             // 设置照片放大功能
             setupPhotoModal();
         });
