@@ -199,7 +199,7 @@ footer {
 @keyframes fadeInDown {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-15px);
     }
     to {
         opacity: 1;
