@@ -48,30 +48,35 @@
             });
         });
         
-        // 内联数据作为备选（与外部JSON格式一致）
-        const fallbackData = [
-            {
-                "date": "2024-07-25",
-                "title": "我出生了",
-                "photos": [
-                    {
-                        "src": "photos/202407.JPG"
-                    }
-                ]
-            }
-        ];
-        
         // 加载日记数据
         async function loadJournalData() {
             try {
                 console.log('开始加载journal.json...');
-                const response = await fetch('journal.json');
-                console.log('HTTP状态:', response.status);
-                if (!response.ok) {
-                    throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
+                console.log('当前页面URL:', window.location.href);
+                
+                // 尝试不同的路径
+                const paths = ['journal.json', './journal.json', '/' + window.location.pathname.split('/')[1] + '/journal.json'];
+                let data = null;
+                
+                for (const path of paths) {
+                    try {
+                        console.log('尝试路径:', path);
+                        const response = await fetch(path);
+                        console.log('HTTP状态:', response.status);
+                        
+                        if (response.ok) {
+                            data = await response.json();
+                            console.log('成功加载JSON数据:', data);
+                            break;
+                        }
+                    } catch (pathError) {
+                        console.log('路径尝试失败:', path, pathError.message);
+                    }
                 }
-                const data = await response.json();
-                console.log('成功加载JSON数据:', data);
+                
+                if (!data) {
+                    throw new Error('所有路径尝试均失败');
+                }
                 
                 // 按日期降序排序，最新的在前面
                 data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -79,10 +84,12 @@
                 renderJournalItems(data);
             } catch (error) {
                 console.error('加载日记数据失败:', error);
-                console.log('使用内联备选数据');
-                // 使用内联数据作为备选
-                fallbackData.sort((a, b) => new Date(b.date) - new Date(a.date));
-                renderJournalItems(fallbackData);
+                document.getElementById('journal-container').innerHTML = `
+                    <p style="text-align: center; color: #95a5a6;">加载失败，请检查浏览器控制台获取详细信息</p>
+                    <p style="text-align: center; font-size: 0.8rem; color: #95a5a6;">Error: ${error.message}</p>
+                    <p style="text-align: center; font-size: 0.8rem; color: #95a5a6;">请确保journal.json文件存在且格式正确</p>
+                    <p style="text-align: center; font-size: 0.8rem; color: #95a5a6;">当前页面: ${window.location.href}</p>
+                `;
             }
         }
         
