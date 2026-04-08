@@ -57,48 +57,28 @@
         });
         
         // 加载日记数据
-        async function loadJournalData() {
-            try {
-                console.log('开始加载journal.json...');
-                console.log('当前页面URL:', window.location.href);
-                
-                // 尝试不同的路径
-                const paths = ['journal.json', './journal.json', '/' + window.location.pathname.split('/')[1] + '/journal.json'];
-                let data = null;
-                
-                for (const path of paths) {
-                    try {
-                        console.log('尝试路径:', path);
-                        const response = await fetch(path);
-                        console.log('HTTP状态:', response.status);
-                        
-                        if (response.ok) {
-                            data = await response.json();
-                            console.log('成功加载JSON数据:', data);
-                            break;
-                        }
-                    } catch (pathError) {
-                        console.log('路径尝试失败:', path, pathError.message);
-                    }
+        function loadJournalData() {
+            console.log('开始加载日记数据...');
+            
+            // 直接硬编码JSON数据
+            const data = [
+                {
+                    "date": "2025-10-01",
+                    "title": "我在济南芦南村",
+                    "photo": "photos/20251001.jpg"
+                },{
+                    "date": "2024-07-25",
+                    "title": "我出生了",
+                    "photo": "photos/20240725.jpg"
                 }
-                
-                if (!data) {
-                    throw new Error('所有路径尝试均失败');
-                }
-                
-                // 按日期降序排序，最新的在前面
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                renderJournalItems(data);
-            } catch (error) {
-                console.error('加载日记数据失败:', error);
-                document.getElementById('journal-container').innerHTML = `
-                    <p style="text-align: center; color: #95a5a6;">加载失败，请检查浏览器控制台获取详细信息</p>
-                    <p style="text-align: center; font-size: 0.8rem; color: #95a5a6;">Error: ${error.message}</p>
-                    <p style="text-align: center; font-size: 0.8rem; color: #95a5a6;">请确保journal.json文件存在且格式正确</p>
-                    <p style="text-align: center; font-size: 0.8rem; color: #95a5a6;">当前页面: ${window.location.href}</p>
-                `;
-            }
+            ];
+            
+            console.log('数据加载成功:', data);
+            
+            // 按日期降序排序，最新的在前面
+            data.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            renderJournalItems(data);
         }
         
         // 渲染日记项目
@@ -135,8 +115,8 @@
                     // 尝试多种图片路径格式
                     const photoPath = item.photo;
                     photosHTML += `
-                        <div class="gallery-item">
-                            <img src="${photoPath}" alt="${item.title}" onclick="openPhotoModal('${photoPath}', '${item.title}')">
+                        <div class="gallery-item" onclick="openPhotoModal('${photoPath}', '${item.title}')">
+                            <img src="${photoPath}" alt="${item.title}">
                         </div>
                     `;
                     photosHTML += '</div>';
@@ -147,8 +127,8 @@
                     item.photos.forEach(photo => {
                         const photoSrc = photo.src || photo;
                         photosHTML += `
-                            <div class="gallery-item">
-                                <img src="${photoSrc}" alt="${item.title}" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
+                            <div class="gallery-item" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
+                                <img src="${photoSrc}" alt="${item.title}">
                             </div>
                         `;
                     });
@@ -165,10 +145,6 @@
                 images.forEach(img => {
                     img.classList.add('loaded');
                 });
-                
-                // 触发自定义事件，通知照片模态框设置点击事件
-                console.log('Journal items rendered, triggering event');
-                window.dispatchEvent(new Event('journalItemsRendered'));
             }, 100);
         }
         

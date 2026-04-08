@@ -100,7 +100,7 @@ body {
 
 .journal-date {
     font-weight: 600;
-    color: #e74c3c;
+    color: #666666;
     font-size: 0.8rem;
     letter-spacing: 0.5px;
     position: absolute;
@@ -295,15 +295,7 @@ footer {
     overflow: hidden;
 }
 
-.journal-item::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
-}
+/* 移除左边边框条，统一整体风格 */
 
 .gallery-item {
     position: relative;
@@ -365,11 +357,14 @@ img {
 
 .modal-content {
     position: relative;
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 0;
     width: 90%;
     max-width: 800px;
     animation: zoomIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content img {
@@ -381,8 +376,8 @@ img {
 
 .close {
     position: absolute;
-    top: -40px;
-    right: 0;
+    top: -50px;
+    right: -50px;
     color: #f1f1f1;
     font-size: 40px;
     font-weight: bold;
@@ -411,8 +406,15 @@ img {
 /* 点击图片效果 */
 .journal-gallery .gallery-item {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .journal-gallery .gallery-item:hover {
     transform: scale(1.02);
+}
+
+.journal-gallery .gallery-item img {
+    pointer-events: none;
 }
