@@ -77,14 +77,16 @@ body {
 
 .journal-item {
     background-color: var(--card-color);
-    border-radius: 0;
-    padding: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    border-radius: 4px;
+    padding: 0.8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     transition: all 0.4s ease;
-    border-left: 1px solid var(--accent-color);
-    min-height: 240px;
+    border-left: 2px solid var(--primary-color);
+    min-height: 220px;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
 .journal-item:hover {
@@ -93,35 +95,37 @@ body {
 }
 
 .journal-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .journal-date {
-    font-weight: 400;
+    font-weight: 500;
     color: var(--primary-color);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .journal-content {
-    margin-bottom: 1.2rem;
-    line-height: 1.6;
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
     color: var(--gray-color);
     flex: 1;
 }
 
 .journal-content p {
     margin: 0;
-    font-size: 0.8rem;
-    font-weight: 300;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 /* 日记中的照片画廊 */
 .journal-gallery {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.3rem;
     flex-wrap: wrap;
-    margin-top: 1.2rem;
+    margin-top: 0.6rem;
 }
 
 .journal-gallery .gallery-item {
