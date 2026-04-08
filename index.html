@@ -1,790 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Homepage of Lizhuang Tan"/>
-    <meta name="keywords" content="Lizhuang Tan, tanlizhuang, 谭立状, 齐鲁工业大学, 国家超级计算济南中心, 山东省计算中心, 济南超算, 超算互联网, 山东算网"/>
-    <meta name="author" content="Lizhuang Tan"/>
-    <link rel="icon" href="img/logo.ico" type="image/x-icon">
-    <title>谭立状 / Lizhuang Tan</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+    <meta name="description" content="儿子的个人主页，记录日常照片和日记">
+    <title>宝贝成长记录</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/jemdoc.css" type="text/css" />
-    <style>
-        /* 确保主体内容有相对定位 */
-        body {
-            position: relative;
-            min-height: 100vh;
-            margin: 0;
-            background-color: white;
-        }
-        .profile {
-            position: relative; /* 使其相对于正常流 */
-            transform: translateY(10px); /* 隐藏在视口下方 */
-            opacity: 0; /* 初始透明度为0 */
-            animation: slideUp 0.5s forwards; /* 应用动画 */
-        }
-
-        /* 定义动画效果 */
-        @keyframes slideUp {
-            to {
-                transform: translateY(0); /* 动画结束时的位置 */
-                opacity: 1; /* 动画结束时的透明度 */
-            }
-        }
-        /* 确保内容容器样式正确 */
-        .container {
-            position: relative;
-            z-index: 1;
-            background: transparent;
-        }
-        .about a {
-            color: #9b0d31;
-            text-decoration: none;
-        }
-        .about p {
-            text-align: justify;
-        }
-        
-        .about a:hover {
-            text-decoration: underline;
-        }
-        .about-detail {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: justify;
-        }
-        .about-image {
-            margin-right: 20px;
-            flex: 0 0 auto;
-        }
-
-        .about-image img {
-            width: 100%;
-            max-width: 80px;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .text-container {
-            flex: 1;
-        }
-
-        .about-detail h3 {
-            margin-top: 0;
-            color: #9b0d31;
-            margin: 0 0 0 0;
-            padding: 0 0 0 0;
-        }
-        
-        .about-detail p {
-            margin: 0 0 0 0;
-            padding: 0 0 0 0;
-            text-align: justify;
-
-        }
-        
-        /* 最后一个about-detail元素，减少底部间距 */
-        .about-detail:last-of-type {
-            margin-bottom: 0 !important;
-        }
-
-        /* 音频播放器容器 */
-        .audio-container {
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 8px 8px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .audio-container:hover {
-            background: rgba(155, 13, 49, 0.1);
-        }
-
-        /* 播放图标样式 */
-        .audio-icon {
-            color: #9b0d31;
-            font-size: 16px;
-        }
-        @keyframes slideIn {
-            from {
-                transform: translateY(20px); /* 从下方滑入 */
-                opacity: 0; /* 初始透明度为0 */
-            }
-            to {
-                transform: translateY(0); /* 到达最终位置 */
-                opacity: 1; /* 最终透明度为1 */
-            }
-        }
-        .card {
-            animation: slideIn 0.5s forwards; /* 应用动画 */
-            opacity: 0; /* 初始透明度为0 */
-        }
-        .card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); /* 自适应列数 */
-            gap: 10px; /* 卡片之间的间距 */
-        }
-        .card {
-            background: #fff;
-            border: 1px solid #eaeaea;
-            border-radius: 8px;
-            padding: 10px; /* 卡片的内边距 */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* 主题色底部线条特效 */
-        .card::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #9b0d31, #c41e3a, #e74c3c);
-            transform: translateX(-100%);
-            transition: transform 0.4s ease;
-            z-index: 1;
-        }
-        
-        .card:hover::before {
-            transform: translateX(0);
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
-        .card-image {
-            width: 100%; /* 图片宽度自适应 */
-            height: auto; /* 高度自动调整 */
-            border-radius: 4px; /* 可选：为图片添加圆角 */
-            margin-top: 10px; /* 图片与文本之间的间距 */
-        }
-        .card a {
-            text-decoration: none;
-            color: #9b0d31;
-        }
-
-        .card a:hover {
-            color: #000000;
-        }
-        .card-content {
-            position: relative;
-            margin: 0; /* 移除内容的外边距 */
-            padding: 0; /* 移除内容的内边距 */
-        }
-        .news-date {
-            font-weight: bold;
-            color: #9b0d31;
-            line-height: 2; /* 调整行高，减少行间距 */
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-        .card-content p {
-            margin: 0; /* 移除段落的外边距 */
-            line-height: 1.5; /* 调整行高，减少行间距 */
-        }
-        @media screen and (max-width: 1300px) {
-            .card-container {
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); /* 自适应列数 */
-        }
-        }
-        
-        /* 回到顶部按钮样式 */
-        #back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: none;
-            background-color: #9b0d31;
-            color: white;
-            width: 40px;
-            height: 40px;
-            text-align: center;
-            line-height: 40px;
-            border-radius: 50%;
-            z-index: 99;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        #back-to-top:hover {
-            background-color: #7b0925;
-            opacity: 1;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* 添加平滑滚动效果 */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* 成果视频样式 */
-        .achievements {
-            margin: 0;
-        }
-        
-        .video-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        
-        .video-title-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 5px;
-            z-index: 3;
-        }
-        
-        .video-title-overlay h4 {
-            color: white;
-            margin: 0;
-            font-size: 0.9em;
-            text-align: center;
-            font-weight: 500;
-        }
-        
-        /* 视频标识样式 */
-        .video-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(155, 13, 49, 0.9);
-            color: white;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 0.75em;
-            font-weight: 500;
-            z-index: 4;
-            backdrop-filter: blur(2px);
-            box-shadow: 0 2px 8px rgba(155, 13, 49, 0.3);
-            transform: scale(1);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-        
-        .video-badge i {
-            font-size: 0.8em;
-        }
-        
-        .video-badge:hover {
-            transform: scale(1.05);
-            background: rgba(155, 13, 49, 1);
-            box-shadow: 0 4px 12px rgba(155, 13, 49, 0.5);
-        }
-        
-        /* 添加闪烁效果 */
-        .video-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
-            border-radius: 5px;
-            pointer-events: none;
-        }
-        
-        @keyframes shimmer {
-            0% {
-                left: -100%;
-            }
-            100% {
-                left: 100%;
-            }
-        }
-        
-        .video-thumbnail {
-            position: relative;
-            width: 100%;
-            margin: 0;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .video-thumbnail:hover {
-            transform: scale(1.02);
-        }
-        
-        .thumbnail-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        /* 永久显示的播放图标 */
-        .play-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(155, 13, 49, 0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5em;
-            z-index: 2;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .video-thumbnail:hover .play-icon {
-            background: rgba(155, 13, 49, 1);
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        @media screen and (max-width: 768px) {
-            #back-to-top {
-                bottom: 15px;
-                right: 15px;
-                width: 35px;
-                height: 35px;
-                line-height: 35px;
-                font-size: 0.9em;
-            }
-            
-            .video-container {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            
-            .video-thumbnail {
-                margin: 5px 0;
-            }
-            
-            .thumbnail-img {
-                height: 150px;
-            }
-            
-            .video-badge {
-                font-size: 0.7em;
-                padding: 4px 8px;
-                gap: 3px;
-            }
-            
-            .video-badge i {
-                font-size: 0.75em;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1><a href="index.html"><span class="name-color"><img id="tan_logo" src="./img/tan.jpg" alt="Lizhuang Tan">Lizhuang Tan (谭立状)</span></a></h1>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="cv.html">CV</a>
-            <a href="teaching.html">Teaching</a>
-            <a href="papers.html">Publication</a>
-            <a href="patents.html">Patent</a>
-            <a href="standard.html">Standard</a>
-            <a href="group.html">Group</a>
-            <a href="service.html">Service</a>
-            <a href="data.html">Data</a>
-            <a href="photos.html">Photo</a>
-            <a href="conference.html">Conference</a>
-            <a href="index_cn.html" style="font-size: 2em;">
-                <img src="img/language-solid.svg" alt="Language Icon" class="language-icon">
-            </a>
-        </nav>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>宝贝成长记录</h1>
+            <p>记录每一个珍贵的瞬间</p>
+            <div class="hero-buttons">
+                <a href="#diary" class="btn btn-primary">成长日记</a>
+                <a href="#gallery" class="btn btn-secondary">照片墙</a>
+            </div>
+        </div>
     </header>
-    <div class="container">
-        <div class="profile">
-            <img id="tan" src="./img/tan.jpg" alt="Lizhuang Tan">
-            <div class="information">
-                <h2>Lizhuang Tan (谭立状)
-                    <div class="audio-container" onclick="toggleAudio()">
-                        <i class="fas fa-volume-up audio-icon"></i>
-                        <span class="audio-text"></span>
-                        <audio id="audio-player" style="display: none;">
-                            <source src="./files/tanlizhuang-chinese.mp3" type="audio/mpeg">
-                        </audio>
-                    </div>
+    
+    <main>
+        <section id="diary" class="diary-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-book"></i> 成长日记
                 </h2>
-                <p><b>Associate Researcher, Ph.D.</b></p>
-                <p><a href="http://www.keylab.net/" target="_blank">Shandong Provincial Key Laboratory of Computer Networks</a>,</p>
-                <p><a href="http://www.scsc.cn/" target="_blank">Shandong Computer Science Center</a> (<a href="http://www.nsccjn.cn/" target="_blank">National Supercomputer Center in Ji'nan</a>),</p>
-                <p><a href="https://www.qlu.edu.cn/" target="_blank">Qilu University of Technology (Shandong Academy of Sciences)</a></p>
-                <p class="icon-text">
-                    <i class="fas fa-envelope"></i> tanlzh@sdas.org/lzhtan@qlu.edu.cn
-                </p>
-                <p class="icon-text">
-                    <i class="fa-solid fa-map-location-dot"></i> <a href="https://j.map.baidu.com/05/u-d" target="_blank">Supercomputing Technology Park, No. 28666, Jingshi East Road, Ji'nan, Shandong, China.</a>
-                </p>
+                <div class="diary-container">
+                    <div class="diary-item">
+                        <div class="diary-header">
+                            <div class="diary-date">2026-04-08</div>
+                            <div class="diary-icon">
+                                <i class="fas fa-bicycle"></i>
+                            </div>
+                        </div>
+                        <div class="diary-content">
+                            今天学会了骑自行车，虽然摔了几次，但终于成功了！感觉自己像个小勇士，下次要挑战更远的距离。
+                        </div>
+                        <div class="diary-photos">
+                            <img src="photos/bike.jpg" alt="骑自行车">
+                        </div>
+                    </div>
+                    <div class="diary-item">
+                        <div class="diary-header">
+                            <div class="diary-date">2026-04-05</div>
+                            <div class="diary-icon">
+                                <i class="fas fa-paw"></i>
+                            </div>
+                        </div>
+                        <div class="diary-content">
+                            第一次去动物园，看到了大象和长颈鹿，非常开心！最喜欢看小猴子在树上跳来跳去，太可爱了。
+                        </div>
+                        <div class="diary-photos">
+                            <img src="photos/zoo.jpg" alt="动物园">
+                        </div>
+                    </div>
+                    <div class="diary-item">
+                        <div class="diary-header">
+                            <div class="diary-date">2026-04-01</div>
+                            <div class="diary-icon">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                        </div>
+                        <div class="diary-content">
+                            幼儿园的春游活动，和小朋友们一起放风筝，玩得很开心。我的风筝飞得最高，老师还表扬了我呢！
+                        </div>
+                        <div class="diary-photos">
+                            <img src="photos/spring-outing.jpg" alt="春游">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="icon-container">
-                <a href="http://jsxb.scsc.cn/introlist_76/806.html"><i class="fas fa-home"></i></a>
-                <a href="https://scholar.google.com/citations?user=knsgQNIAAAAJ"><i class="fa-brands fa-google"></i></a>
-                <a href="https://github.com/lzhtan"><i class="fab fa-github"></i></a>
-                <a href="https://www.cnblogs.com/lzhtan/"><i class="fa-solid fa-square-rss"></i></a>
-                <a href="https://www.linkedin.com/in/lizhuang-tan-436663336"><i class="fab fa-linkedin"></i></a>
-                <a href="https://orcid.org/0000-0001-6826-4596"><i class="fab fa-orcid"></i></a>
-            </div>
-        </div>
-        <div class="about">
-            <h3><span class="color-bar"></span>About Me</h3>
-            <p>Since July 2022, I have been working in Shandong Computer Science Center (National Supercomputer Center in Ji'nan), China. 
-            From October 2024 to October 2025, I am a visiting scholar in Professor <a href="http://dpnm.postech.ac.kr/~jwkhong/" target="_blank">James Won-Ki Hong</a>'s DPNM Lab at Pohang University of Science and Technology, Korea.
-            From April 2021 to June 2022, I worked as a R&D intern in the High-Speed ​​Network Team of ByteDance, working on RDMA/RoCE under the leadership of Dr. <a href="https://scholar.google.com/citations?user=qOX0mXMAAAAJ" target="_blank">Zhuo Jiang</a>.</br>
-            In June 2022, I received my Ph.D. degree from the National Engineering Research Center of Advanced Network Technologies, Beijing Jiaotong University.
-            In June 2017, I received my Bachelor of Engineering degree in Communication Engineering and my Bachelor of Laws degree from Shandong Normal University.</br>
-            My research interest is the <a href="https://scholar.google.com/citations?user=knsgQNIAAAAJ" target="_blank">Network Measurement, Testing and Management</a>, especially <a href="https://www.bilibili.com/video/BV1mh411k7rS" target="_blank">Software-defined Networks</a> and <a href="https://space.bilibili.com/522278407/channel/collectiondetail?sid=2788892" target="_blank">Data Center Network</a>. These all serve the <a href="https://www.bilibili.com/video/BV1xK411x75o" target="_blank">National Supercomputing Internet</a>, which is a project that explore how to combine high-performance computing (supercomputing) with wide-area computer networks.</p>
-        </div>
-        <div class="about-detail">
-            <div class="about-image">
-                <img src="img/netmeasurement.jpeg" alt="Network Measurement Image">
-            </div>
-            <div class="text-container">
-                <h3>High-speed Network Measurement</h3>
-                <p>Proposed an SRv6 based active network telemetry architecture and implementation strategy <a style="color: #666;">(2nd Internet Architecture Academic Conference, China Information and Communications Conference, 2019)</a>. Integrated the segment routing label stack into custom probes by encoding it as IPv6 extension headers, and enabled flexible orchestration of telemetry instructions and paths with an improved breadth first search algorithm. This is among the earliest research efforts to combine SRv6 with INT in the field. Centered on two system goals, improving telemetry freshness and reducing telemetry intrusiveness, proposed a multi objective optimization method for selecting telemetry carrying flows <a style="color: #666;">(CN Patent 202010609191.7, 2020; APNOMS, 2021)</a>, and developed and open sourced an orchestration solver based on NSGA <a style="color: #666;">(Non dominated Sorting Genetic Algorithm)</a>. Proposed, early in the community, a hybrid in band telemetry task orchestration algorithm that fuses active and passive telemetry <a style="color: #666;">(APNOMS, 2022)</a>. Published a survey on in band network telemetry <a style="color: #666;">(Computer Networks, 2021)</a>, providing a systematic overview of core implementation techniques, optimization methods, and deployment practices. Proposed a coloring based packet loss detection and localization mechanism <a style="color: #666;">(IEEE Network Letters, 2021)</a> and a packet loss detection and localization solution for multipath scenarios, both of which were adopted by an in band telemetry reference specification. First identified flow coupled missing telemetry information, and proposed quality diagnosis and missing data recovery algorithms for in band telemetry <a style="color: #666;">(TNSM, 2021)</a>. First identified orchestration induced out of order telemetry and proposed a reordering architecture that combines online processing with offline sorting <a style="color: #666;">(APNOMS, 2025)</a>. Built the first spatiotemporal database for in band telemetry storage, <a href="https://github.com/lzhtan/Intdb" style="color: #000000;" target="_blank">IntDB</a> <a style="color: #666;">(APNOMS Best Paper Nomination, 2025)</a>. Contributed to the design of Hostping, ByteDance’s in host latency monitoring and fault diagnosis system <a style="color: #666;">(NSDI, 2023)</a>, and the prototype has been deployed in ByteDance’s data center network monitoring system.</p>
-            </div>
-        </div>
-        <div class="about-detail">
-            <div class="about-image">
-                <img src="img/nettesting.jpeg" alt="Network Management">
-            </div>
-            <div class="text-container">
-                <h3>High-speed Network Testing</h3>
-                <p>Developed a prototype Software Defined Network Impairment Emulator <a style="color:#666;">(ZL202320329297.0, ZL202310224941.2, 2023)</a>, with network impairment logic implemented on a programmable hardware switch. The design includes: (1) intent driven network impairment configuration <a style="color: #666;">(ZL2023117778457.0, 2023)</a>, enabling high level specification and automated translation of impairment policies; (2) serial and parallel composable deployment of impairment functions <a style="color: #666;">(HPCC, 2024)</a>, supporting flexible function chaining and hybrid execution models; and (3) fine grained impairment realization through CPU–Tofino co design, leveraging coordinated control plane and data plane processing. The system satisfies both functional and performance requirements for realistic network impairment emulation, significantly enhances the programmability and expressiveness of impairment modeling, and effectively reduces the cost and operational overhead of network testing and experimentation.
-                </p>
-            </div>
-        </div>
-        <div class="about-detail">
-            <div class="about-image">
-                <img src="img/netmanagement.jpeg" alt="Network Measurement Image">
-            </div>
-            <div class="text-container">
-                <h3>High-speed Network Management</h3>
-                <p>(1) <b>Network Management</b>: Proposed a preference aware and two sided matching based traffic scheduling framework for data centers, formulating the path flow assignment problem with preference ordering and developing a two sided matching algorithm that jointly ensures stability and optimality of the matching outcome <a style="color: #666;">(ETT Cover Paper, 2022)</a>. Designed a service function chain aggregation mapping algorithm by modeling function chain placement as a mixed integer linear programming problem; the proposed approach significantly reduces both operational cost and end to end latency <a style="color: #666;">(JNCA, 2024)</a>. Developed a lossless network waterline auto tuning mechanism, <a href="https://github.com/lzhtan/bytetuning" style="color: #000000;" target="_blank">ByteTuning</a> <a style="color: #666;">(TCC, 2024)</a>, which enables end to end RoCEv2 performance optimization across switches and NICs. By minimizing port coverage sets, applying data aggregation, and introducing configuration language translation, the system reduces the search space and improves tuning efficiency; the prototype has been deployed in ByteDance’s data center network. To address performance bottlenecks in dynamic reconfiguration of FPGA based NICs, proposed a space division multiplexing based FPGA virtualized networking architecture <a style="color: #666;">(APNOMS, 2025)</a>, substantially improving resource utilization and processing throughput. Implemented an asynchronous traffic shaping prototype based on the BMv2 software switch <a style="color: #666;">(APNOMS, 2023)</a>, including working components, worker threads, and shaping parameter configuration; in both single priority and multi priority scenarios, the measured queuing delay remains below the theoretical delay bound.</p> <p>(2) <b>Network Transport</b>: Proposed DCQUIC, a QUIC based transport protocol tailored for data center networks <a style="color: #666;">(INFOCOM ICCCN, 2021)</a>, and further accelerated connection establishment by offloading key negotiation to FPGA hardware <a style="color: #666;">(ICCCN, 2025)</a>. Compared with DCTCP and DCUDP, DCQUIC demonstrates superior performance in connection setup latency, transmission efficiency, flexibility, and reliability. Open sourced a modular QUIC development prototype <a style="color: #666;">(CoNEXT Poster, 2020)</a> and the <a href="https://github.com/lzhtan/OpenQUIC" style="color: #000000;" target="_blank">OpenQUIC</a> project, which standardizes congestion control, flow control, and cryptographic modules to enhance extensibility and interoperability. Proposed the proactive connection migration mechanism <a style="color: #666;">(IJNM Cover Paper, 2025; MobiQuitous, 2020)</a> for QUIC that decouples connection management from vertical and horizontal network handovers, applies multi armed bandit based exploration and exploitation of link quality, and leverages redundant access with adaptive migration to improve reliability and performance; an IETF Internet Draft has been submitted. Proposed MPDTP, a block scheduling mechanism for multipath transport <a style="color: #666;">(NaNA Best Paper Award, 2021)</a>, which jointly considers path delay, throughput, and block deadline characteristics to significantly improve transmission efficiency.</p> <p>(3) <b>Supercomputing Internet / Shandong Computing Network</b>: Authored the monograph <i>Network Operating System SONiC: Principles, Technologies, and Practice</i>. Designed a SDWAN-based networking architecture for the Supercomputing Internet, and led the drafting of the national standard “Intelligent Computing - Supercomputing Internet - Technical Requirements for Networking.”</p>
-            </div>
-        </div>
+        </section>
         
-        <!-- 成果视频 -->
-        <div class="achievements">
-            <div class="video-container">
-                <div class="video-thumbnail">
-                    <div class="video-badge">
-                        <i class="fas fa-video"></i> Video
+        <section id="gallery" class="photo-gallery">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-images"></i> 照片墙
+                </h2>
+                <div class="gallery-container">
+                    <div class="gallery-item">
+                        <img src="photos/photo1.jpg" alt="照片1">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">快乐时光</div>
+                        </div>
                     </div>
-                    <div class="play-icon">
-                        <i class="fas fa-play"></i>
+                    <div class="gallery-item">
+                        <img src="photos/photo2.jpg" alt="照片2">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">成长瞬间</div>
+                        </div>
                     </div>
-                    <div class="video-title-overlay">
-                        <h4>Proactive Connection Migration</h4>
+                    <div class="gallery-item">
+                        <img src="photos/photo3.jpg" alt="照片3">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">户外活动</div>
+                        </div>
                     </div>
-                    <img src="img/video/pcm_video.avif" alt="Active Connection Migration Video Thumbnail" class="thumbnail-img">
-                </div>
-                <div class="video-thumbnail">
-                    <div class="video-badge">
-                        <i class="fas fa-video"></i> Video
+                    <div class="gallery-item">
+                        <img src="photos/photo4.jpg" alt="照片4">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">家庭时光</div>
+                        </div>
                     </div>
-                    <div class="play-icon">
-                        <i class="fas fa-play"></i>
+                    <div class="gallery-item">
+                        <img src="photos/photo5.jpg" alt="照片5">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">学习时刻</div>
+                        </div>
                     </div>
-                    <div class="video-title-overlay">
-                        <h4>Spatiotemporal Database for Telemetry</h4>
-                    </div>
-                    <img src="img/video/intdb_video.avif" alt="Telemetry Time Series Database Video Thumbnail" class="thumbnail-img">
-                </div>
-                <div class="video-thumbnail">
-                    <div class="video-badge">
-                        <i class="fas fa-video"></i> Video
-                    </div>
-                    <div class="play-icon">
-                        <i class="fas fa-play"></i>
-                    </div>
-                    <div class="video-title-overlay">
-                        <h4>In-band Network Telemetry</h4>
-                    </div>
-                    <img src="img/video/int_video.avif" alt="In-band Network Telemetry Video Thumbnail" class="thumbnail-img">
-                </div>
-                <div class="video-thumbnail">
-                  <div class="video-badge">
-                      <i class="fas fa-video"></i> 成果演示视频
-                  </div>
-                  <div class="play-icon">
-                      <i class="fas fa-play"></i>
-                  </div>
-                  <div class="video-title-overlay">
-                      <h4>Reliable Network Telemetry</h4>
-                  </div>
-                  <img src="img/video/losssight.avif" alt="可靠网络遥测视频缩略图" class="thumbnail-img">
-              </div>
-              <div class="video-thumbnail">
-                  <div class="video-badge">
-                      <i class="fas fa-video"></i> 成果演示视频
-                  </div>
-                  <div class="play-icon">
-                      <i class="fas fa-play"></i>
-                  </div>
-                  <div class="video-title-overlay">
-                      <h4>Non-disruptive Warm Reboot for SONiC</h4>
-                  </div>
-                  <img src="img/video/sonic.avif" alt="SONiC视频缩略图" class="thumbnail-img">
-              </div>
-            </div>
-        </div>
-
-        <div class="news">
-            <h3><span class="color-bar"></span>News</h3>
-            <div class="card-container">
-                <div class="card" style="grid-column: span 1; grid-row: span 2;"> <!-- 占据2列2行 -->
-                    <div class="card-content">
-                        <span class="news-date">09/2025</span>
-                        <p>IntDB was selected as the Best Paper Award Candidate by APNOMS'25.</p>
-                    </div>
-                </div>
-                <div class="card" style="grid-column: span 1; grid-row: span 2;"> <!-- 占据2列2行 -->
-                    <div class="card-content">
-                        <span class="news-date">07/2025</span>
-                        <p>PCM-QUIC was selected as the <a href="https://onlinelibrary.wiley.com/doi/10.1002/nem.70022" target="_blank">FEATURED COVER</a> by International Journal of Network Management.</p>
-                        <img src="img/2025-论文-IJNM-Cover.jpg" class="card-image" alt="IJNM Cover">
-                    </div>
-                </div>
-                <div class="card" style="grid-column: span 1; grid-row: span 2;"> <!-- 占据1列2行 -->
-                    <div class="card-content">
-                        <span class="news-date">12/2024</span>
-                        <p><i><a href="https://item.jd.com/14901460.html">Network Operating System SONiC: Principles, Technologies and Practices</a></i> was published and released.</p>
-                        <img src="img/2024-专著-SONIC.jpg" class="card-image" style="box-shadow: 0 2px 10px rgba(152, 48, 48, 0.1);">
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">10/2024</span>
-                        <p>ByteTuning is accepted by IEEE Transacitons on Cloud Computing.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">08/2024</span>
-                        <p>A project on Buffer Management of Data Center Networking was funded by the National Natural Science Foundation of China.</p>
-                    </div>
-                </div>
-                <div class="card" style="grid-column: span 1; grid-row: span 2;"> <!-- 占据2列2行 -->
-                    <div class="card-content">
-                        <span class="news-date">07/2024</span>
-                        <p>I have been selected for the Korea-China Young Scientists Exchange Program and will be conducting network management research at <a href="https://cse.postech.ac.kr/">POSTECH</a>.</p>
-                        <img src="img/postech.png" class="card-image">
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">07/2023</span>
-                        <p>A project on In-band Network Telemetry was funded by the Natural Science Foundation of Shandong.
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">05/2023</span>
-                        <p>LossSight won the <a href="./img/CRAIC2023.jpg" target="_blank">second prize</a> of the 25th China Robotics and Artificial Intelligence Competition.
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">12/2022</span>
-                        <p>We will host <a href="http://www.nana-conference.org/" target="_blank" >NaNA'23</a> in Qingdao, P.R.China in Aug. 2023, and welcome submissions on networking. 
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">11/2022</span>
-                        <p>A project on FPGA-based offloading in data centers was funded by the Natural Science Foundation of Shandong and Inspur Inc.
-                        </p>
-                    </div>
-                </div>
-                <div class="card" style="grid-column: span 1; grid-row: span 2;"> <!-- 占据2列2行 -->
-                    <div class="card-content">
-                        <span class="news-date">08/2022</span>
-                        <p>Path-Flow Matching was selected as <a href="https://onlinelibrary.wiley.com/doi/10.1002/ett.4637" target="_blank">FEATURED COVER PAPER</a> by Wiley Transactions on Emerging Telecommunications Technologies.
-                        </p>
-                        <img src="img/2019-论文-ETT-Cover.jpg" class="card-image">
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">07/2022</span>
-                        <p>Participated in the China Computing Conference 2022 and made a <a href="https://www.cnii.com.cn/rmydb/202208/t20220803_401756.html" target="_blank">report</a>.
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <span class="news-date">06/2022</span>
-                        <p>Got the PhD from Beijing Jiaotong University. Thanks to my mentor, Prof. <a href="http://faculty.bjtu.edu.cn/8131/" target="_blank">Wei Su</a>.
-                        </p>
+                    <div class="gallery-item">
+                        <img src="photos/photo6.jpg" alt="照片6">
+                        <div class="gallery-overlay">
+                            <div class="gallery-caption">友谊万岁</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
+        </section>
+    </main>
+    
     <footer>
-        <div style="text-align: center;">
-            <div id="clustrmap-container" style="width: 80px; overflow: hidden; margin: auto;">
-                <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=nvpDsZSXyZ2NtP1ESMLG_i4d559kTowybkSfJNrVjQU"></script>            </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>宝贝成长记录</h3>
+                    <p>记录每一个珍贵的瞬间</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-icon"><i class="fab fa-weixin"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-weibo"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-qq"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 宝贝成长记录 | 用心记录每一个成长瞬间</p>
             </div>
         </div>
-        <p>Copyright &copy; 2022 - New Era. By Lizhuang Tan</p>
     </footer>
     
-    <!-- 回到顶部按钮 -->
-    <a href="#" id="back-to-top" title="Back to Top">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-
     <script>
-        // 音频播放控制
-        function toggleAudio() {
-            var audio = document.getElementById("audio-player");
-            if (audio.paused) {
-                audio.play();
-            } else {
-                audio.pause();
-            }
-        }
-        
-        // 性能优化：卡片动画延迟执行
-        function animateCards() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translate3d(0, 0, 0)';
-                }, index * 100); // 每张卡片延迟100ms
-            });
-        }
-
-        // 防抖函数优化滚动性能
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // 优化滚动事件处理
-        const optimizedScrollHandler = debounce(function() {
-            const backToTopBtn = document.getElementById("back-to-top");
-            const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-            
-            if (scrollTop > 300) {
-                backToTopBtn.style.display = "block";
-            } else {
-                backToTopBtn.style.display = "none";
-            }
-        }, 10);
-
-        // 预加载关键资源
-        function preloadCriticalResources() {
-            const criticalImages = [
-                'img/tan.jpg',
-                'img/netmeasurement.jpeg',
-                'img/nettesting.jpeg',
-                'img/netmanagement.jpeg'
-            ];
-            
-            criticalImages.forEach(src => {
-                const link = document.createElement('link');
-                link.rel = 'preload';
-                link.as = 'image';
-                link.href = src;
-                document.head.appendChild(link);
-            });
-        }
-        
-        // 回到顶部按钮 - 使用优化后的滚动处理
-        window.addEventListener('scroll', optimizedScrollHandler, { passive: true });
-
-        // 点击回到顶部按钮
-        document.getElementById("back-to-top").addEventListener("click", function(e) {
-            e.preventDefault();
-            // 对于不支持scroll-behavior的浏览器，使用JavaScript滚动
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-        
-        // DOM加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
-            // 启动卡片动画
-            setTimeout(animateCards, 500);
-            
-            // 预加载关键资源
-            preloadCriticalResources();
-            
-            // 播放按钮点击事件
-            const playIcons = document.querySelectorAll('.play-icon');
-            playIcons.forEach((playIcon, index) => {
-                playIcon.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 阻止事件冒泡
-                    // 根据索引打开对应的哔哩哔哩视频
-                    const videoUrls = [
-                        'https://www.bilibili.com/video/BV1eaRhY9E4R/',
-                        'https://www.bilibili.com/video/BV1PpT2zzELD/',
-                        'https://www.bilibili.com/video/BV14Z4y1H7N2/',
-                        'https://www.bilibili.com/video/BV1CV411j7AX/',
-                        'https://www.bilibili.com/video/BV1VMJ4zhEQF/'
-                    ];
-                    if (videoUrls[index]) {
-                        window.open(videoUrls[index], '_blank');
-                    }
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
             });
         });
-
-        // 页面加载完成后的优化
+        
+        // 图片加载动画
         window.addEventListener('load', function() {
-            // 移除加载状态
-            document.body.classList.add('loaded');
-            
-            // 预加载下一页面资源（可选）
-            const nextPageUrls = ['papers.html', 'cv.html', 'teaching.html'];
-            nextPageUrls.forEach(url => {
-                const link = document.createElement('link');
-                link.rel = 'prefetch';
-                link.href = url;
-                document.head.appendChild(link);
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.classList.add('loaded');
             });
         });
     </script>
