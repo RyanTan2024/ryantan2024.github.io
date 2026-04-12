@@ -116,86 +116,130 @@
                 return new Date(dateB) - new Date(dateA);
             });
             
-            renderJournalItems(data);
+            // 渐进式加载日记
+            progressiveLoad(data);
         }
         
-        // 渲染日记项目
-        function renderJournalItems(items) {
+        // 渐进式加载日记
+        function progressiveLoad(items) {
             const container = document.getElementById('journal-container');
             container.innerHTML = '';
             
-            items.forEach(item => {
-                const journalItem = document.createElement('div');
-                let itemClass = 'journal-item';
-                
-                // 根据照片数量设置不同的类名
-                if (item.photos && item.photos.length === 3) {
-                    itemClass += ' journal-item-wide-3';
-                } else if (item.photos && item.photos.length === 2) {
-                    itemClass += ' journal-item-wide-2';
-                } else if (item.photos && item.photos.length === 4) {
-                    itemClass += ' journal-item-wide-2';
+            let currentIndex = 0;
+            const batchSize = 2; // 每次加载2个事件
+            
+            function loadNextBatch() {
+                if (currentIndex >= items.length) {
+                    return;
                 }
                 
-                journalItem.className = itemClass;
+                const endIndex = Math.min(currentIndex + batchSize, items.length);
+                const batchItems = items.slice(currentIndex, endIndex);
                 
-                // 日期 - 显示为MM/YYYY格式
-                const date = new Date(item.date);
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const formattedDate = `${month}/${year}`;
-                const dateHTML = `
-                    <div class="journal-header">
-                        <div class="journal-date">${formattedDate}</div>
+                batchItems.forEach(item => {
+                    renderJournalItem(item);
+                });
+                
+                currentIndex = endIndex;
+                
+                // 延迟加载下一批，给浏览器时间渲染
+                setTimeout(loadNextBatch, 500);
+            }
+            
+            // 开始加载第一批
+            loadNextBatch();
+        }
+        
+        // 渲染单个日记项目
+        function renderJournalItem(item) {
+            const container = document.getElementById('journal-container');
+            const journalItem = document.createElement('div');
+            let itemClass = 'journal-item';
+            
+            // 根据照片数量设置不同的类名
+            if (item.photos && item.photos.length === 3) {
+                itemClass += ' journal-item-wide-3';
+            } else if (item.photos && item.photos.length === 2) {
+                itemClass += ' journal-item-wide-2';
+            } else if (item.photos && item.photos.length === 4) {
+                itemClass += ' journal-item-wide-2';
+            }
+            
+            journalItem.className = itemClass;
+            
+            // 日期 - 显示为MM/YYYY格式
+            const date = new Date(item.date);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const formattedDate = `${month}/${year}`;
+            const dateHTML = `
+                <div class="journal-header">
+                    <div class="journal-date">${formattedDate}</div>
+                </div>
+            `;
+            
+            // 内容 - 使用title字段
+            const contentHTML = `
+                <div class="journal-content">
+                    <p>${item.title}</p>
+                </div>
+            `;
+            
+            // 照片 - 使用title字段作为alt和caption
+            let photosHTML = '';
+            if (item.photo) {
+                photosHTML = '<div class="journal-gallery">';
+                // 尝试多种图片路径格式
+                const photoPath = item.photo;
+                photosHTML += `
+                    <div class="gallery-item" onclick="openPhotoModal('${photoPath}', '${item.title}')">
+                        <img data-src="${photoPath}" alt="${item.title}" class="lazy-load">
                     </div>
                 `;
-                
-                // 内容 - 使用title字段
-                const contentHTML = `
-                    <div class="journal-content">
-                        <p>${item.title}</p>
-                    </div>
-                `;
-                
-                // 照片 - 使用title字段作为alt和caption
-                let photosHTML = '';
-                if (item.photo) {
-                    photosHTML = '<div class="journal-gallery">';
-                    // 尝试多种图片路径格式
-                    const photoPath = item.photo;
+                photosHTML += '</div>';
+            }
+            // 兼容旧格式（photos数组）
+            else if (item.photos && item.photos.length > 0) {
+                photosHTML = '<div class="journal-gallery">';
+                item.photos.forEach(photo => {
+                    const photoSrc = photo.src || photo;
                     photosHTML += `
-                        <div class="gallery-item" onclick="openPhotoModal('${photoPath}', '${item.title}')">
-                            <img src="${photoPath}" alt="${item.title}">
+                        <div class="gallery-item" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
+                            <img data-src="${photoSrc}" alt="${item.title}" class="lazy-load">
                         </div>
                     `;
-                    photosHTML += '</div>';
-                }
-                // 兼容旧格式（photos数组）
-                else if (item.photos && item.photos.length > 0) {
-                    photosHTML = '<div class="journal-gallery">';
-                    item.photos.forEach(photo => {
-                        const photoSrc = photo.src || photo;
-                        photosHTML += `
-                            <div class="gallery-item" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
-                                <img src="${photoSrc}" alt="${item.title}">
-                            </div>
-                        `;
-                    });
-                    photosHTML += '</div>';
-                }
-                
-                journalItem.innerHTML = dateHTML + contentHTML + photosHTML;
-                container.appendChild(journalItem);
-            });
-            
-            // 触发图片加载动画
-            setTimeout(() => {
-                const images = document.querySelectorAll('img');
-                images.forEach(img => {
-                    img.classList.add('loaded');
                 });
+                photosHTML += '</div>';
+            }
+            
+            journalItem.innerHTML = dateHTML + contentHTML + photosHTML;
+            container.appendChild(journalItem);
+            
+            // 触发懒加载
+            setTimeout(() => {
+                lazyLoadImages();
             }, 100);
         }
+        
+        // 懒加载图片
+        function lazyLoadImages() {
+            const lazyImages = document.querySelectorAll('.lazy-load');
+            
+            lazyImages.forEach(img => {
+                const rect = img.getBoundingClientRect();
+                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                
+                // 当图片进入视口时加载
+                if (rect.top <= windowHeight && rect.bottom >= 0) {
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy-load');
+                    img.classList.add('loaded');
+                }
+            });
+        }
+        
+        // 滚动时触发懒加载
+        window.addEventListener('scroll', lazyLoadImages);
         
         
         
