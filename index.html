@@ -126,7 +126,7 @@
             container.innerHTML = '';
             
             let currentIndex = 0;
-            const batchSize = 2; // 每次加载2个事件
+            const batchSize = 1; // 每次加载2个事件
             
             function loadNextBatch() {
                 if (currentIndex >= items.length) {
@@ -143,7 +143,7 @@
                 currentIndex = endIndex;
                 
                 // 延迟加载下一批，给浏览器时间渲染
-                setTimeout(loadNextBatch, 500);
+                setTimeout(loadNextBatch, 300);
             }
             
             // 开始加载第一批
@@ -231,6 +231,7 @@
                 
                 // 当图片进入视口时加载
                 if (rect.top <= windowHeight && rect.bottom >= 0) {
+                    console.log('Loading image:', img.dataset.src);
                     img.src = img.dataset.src;
                     img.classList.remove('lazy-load');
                     img.classList.add('loaded');
