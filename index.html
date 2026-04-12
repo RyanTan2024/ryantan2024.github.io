@@ -92,7 +92,12 @@
             console.log('数据加载成功:', data);
             
             // 按日期降序排序，最新的在前面
-            data.sort((a, b) => new Date(b.date) - new Date(a.date));
+            data.sort((a, b) => {
+                // 确保日期格式一致，使用YYYY-MM-DD格式进行比较
+                const dateA = a.date.replace(/\//g, '-');
+                const dateB = b.date.replace(/\//g, '-');
+                return new Date(dateB) - new Date(dateA);
+            });
             
             renderJournalItems(data);
         }

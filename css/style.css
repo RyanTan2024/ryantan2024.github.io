@@ -80,7 +80,6 @@ main {
 .journal-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-auto-flow: dense;
     gap: 0.8rem;
 }
 
