@@ -22,10 +22,15 @@ body {
     line-height: 1.6;
     color: var(--primary-color);
     background-color: var(--background-color);
-    overflow-x: hidden;
+    overflow: hidden;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+/* 为相册页面添加滚动条 */
+body.index-page {
+    overflow: auto;
 }
 
 /* 容器样式 */
@@ -50,12 +55,45 @@ body {
     z-index: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* 导航栏样式 */
+.nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.nav a:hover {
+    color: #2E004E;
+}
+
+.nav a.active {
+    color: #2E004E;
+    font-weight: 600;
+}
+
+/* 标题链接样式 */
+.title-link {
+    text-decoration: none;
+    color: inherit;
 }
 
 .hero h1 {
-    font-size: 1.2rem;
-    font-weight: 400;
+    font-size: 1.1rem;
+    font-weight: 500;
     margin: 0;
     letter-spacing: 2px;
     animation: fadeInDown 0.5s ease-out;
@@ -207,13 +245,30 @@ main {
     display: none;
 }
 
+/* 地图部分样式 */
+.map-section {
+    padding: 40px 0;
+    background-color: var(--light-color);
+    margin-top: 0;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+}
+
+.china-map {
+    width: 100%;
+    height: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
 /* 页脚样式 */
 footer {
     background-color: var(--light-color);
     color: var(--primary-color);
     padding: 10px 0;
     border-top: 1px solid rgba(0,0,0,0.05);
-    margin-top: 40px;
+    margin-top: 0;
 }
 
 .footer-bottom {
@@ -276,7 +331,7 @@ footer {
     }
     
     .hero h1 {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
     
     .journal-container {
@@ -304,7 +359,7 @@ footer {
     }
     
     .hero h1 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .journal-section {
@@ -327,6 +382,10 @@ footer {
     
     .journal-gallery {
         min-height: 100px;
+    }
+    
+    .china-map {
+        height: 300px;
     }
 }
 
