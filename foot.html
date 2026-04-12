@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="谭燃 Ryan Tan 的足迹地图">
+    <title>足迹 - 谭燃 Ryan Tan</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="china-map-data.js"></script>
+</head>
+<body class="index-page">
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>谭燃 (Ryan TAN)</h1>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="index.html">相册</a></li>
+                        <li><a href="foot.html" class="active">足迹</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <section id="china-map" class="map-section"></section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 谭燃 (Ryan Tan)</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        if (typeof chinaJson !== 'undefined') {
+            echarts.registerMap('china', chinaJson);
+        }
+        
+        window.addEventListener('load', function() {
+                    var chinaMapDiv = document.getElementById('china-map');
+                    
+                    var chinaMap = echarts.init(chinaMapDiv);
+                    
+                    var option = {
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{b}'
+                        },
+                        visualMap: {
+                            show: true,
+                            min: 0,
+                            max: 1,
+                            left: 'right',
+                            top: 'bottom',
+                            text: ['已走过', '未走过'],
+                            calculable: false,
+                            inRange: {
+                                color: ['#e0e0e0', '#f1c40f']
+                            },
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#333'
+                            },
+                            itemWidth: 15,
+                            itemHeight: 30
+                        },
+                        series: [{
+                            name: '中国',
+                            type: 'map',
+                            map: 'china',
+                            roam: false,
+                            label: {
+                                show: true,
+                                color: '#333',
+                                fontSize: 10
+                            },
+                            itemStyle: {
+                                areaColor: '#e0e0e0',
+                                borderColor: '#ffffff'
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    areaColor: '#f39c12'
+                                }
+                            },
+                            /* // 注释：设置山东省为已访问状态
+                            */  
+                            data: [
+                                {name: '山东省', value: 1, itemStyle: {areaColor: '#f1c40f'}}
+                            ]
+                        }]
+                    };
+                    
+                    chinaMap.setOption(option);
+                    
+                    window.addEventListener('resize', function() {
+                        chinaMap.resize();
+                    });
+                });
+    </script>
+</body>
+</html>

@@ -22,8 +22,7 @@ body {
     line-height: 1.6;
     color: var(--primary-color);
     background-color: var(--background-color);
-    overflow: hidden;
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -44,9 +43,8 @@ body.index-page {
 .hero {
     background-color: var(--light-color);
     color: var(--primary-color);
-    padding: 20px 0;
+    padding: 10px 0;
     position: relative;
-    overflow: hidden;
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
@@ -57,6 +55,7 @@ body.index-page {
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    flex-wrap: nowrap;
 }
 
 /* 导航栏样式 */
@@ -66,6 +65,7 @@ body.index-page {
     gap: 1.5rem;
     margin: 0;
     padding: 0;
+    white-space: nowrap;
 }
 
 .nav a {
@@ -96,8 +96,8 @@ body.index-page {
     font-weight: 500;
     margin: 0;
     letter-spacing: 2px;
-    animation: fadeInDown 0.5s ease-out;
     color: #2E004E;
+    flex-shrink: 0;
 }
 
 /* 部分标题样式 */
@@ -107,6 +107,8 @@ body.index-page {
 
 main {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 成长记录部分样式 */
@@ -247,19 +249,22 @@ main {
 
 /* 地图部分样式 */
 .map-section {
-    padding: 40px 0;
-    background-color: var(--light-color);
     margin-top: 0;
-    min-height: calc(100vh - 120px);
+    flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 70vh;
 }
 
-.china-map {
-    width: 100%;
-    height: 600px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+/* 调整地图大小 */
+#china-map {
+    width: 90%;
+    height: 90%;
+    max-width: 1000px;
+    max-height: 700px;
+    margin: 0 auto;
 }
 
 /* 页脚样式 */
@@ -382,10 +387,6 @@ footer {
     
     .journal-gallery {
         min-height: 100px;
-    }
-    
-    .china-map {
-        height: 300px;
     }
 }
 
@@ -536,4 +537,20 @@ img {
 
 .journal-gallery .gallery-item img {
     pointer-events: none;
+}
+
+/* 导航栏样式 */
+.hero-content .nav {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.hero-content .nav ul {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
 }
