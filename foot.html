@@ -65,6 +65,10 @@
     <main>
         <section class="map-section">
             <div id="map-container"></div>
+            <div id="photo-display" class="photo-display">
+                <img id="display-img" src="" alt="">
+                <p id="display-title"></p>
+            </div>
         </section>
     </main>
 
@@ -91,6 +95,34 @@
             var mapContainer = mapDiv;
 
             var currentMap = 'china';
+            var journalData = [];
+
+            // 加载相册数据
+            fetch('index.html')
+                .then(response => response.text())
+                .then(html => {
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(html, 'text/html');
+                    var scripts = doc.querySelectorAll('script');
+                    console.log('找到的脚本数量:', scripts.length);
+                    scripts.forEach(script => {
+                        console.log('脚本内容:', script.textContent.substring(0, 100));
+                        if (script.textContent.includes('const data =')) {
+                            try {
+                                var match = script.textContent.match(/const data = (\[.*?\]);/s);
+                                if (match) {
+                                    journalData = JSON.parse(match[1]);
+                                    console.log('相册数据加载成功:', journalData);
+                                }
+                            } catch (e) {
+                                console.error('解析相册数据失败:', e);
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('加载相册数据失败:', error);
+                });
 
             function getChinaOption() {
                 return {
@@ -244,6 +276,25 @@
                 };
             }
 
+            // 显示城市照片
+            function showCityPhoto(cityName) {
+                var photoDisplay = document.getElementById('photo-display');
+                var displayImg = document.getElementById('display-img');
+                var displayTitle = document.getElementById('display-title');
+                
+                var cityData = journalData.find(item => item.city === cityName);
+                if (cityData) {
+                    var photos = cityData.photos || (cityData.photo ? [cityData.photo] : []);
+                    if (photos.length > 0) {
+                        displayImg.src = photos[0];
+                        displayTitle.textContent = cityData.title;
+                        photoDisplay.style.display = 'block';
+                        return;
+                    }
+                }
+                photoDisplay.style.display = 'none';
+            }
+
             function renderMap(mapType, extraData) {
                 console.log('renderMap:', mapType);
                 currentMap = mapType;
@@ -299,7 +350,7 @@
                     if (params.componentType === 'series' && params.seriesType === 'map') {
                         var cityName = params.name;
                         console.log('点击的城市:', cityName);
-                        // 省份地图点击城市时不做处理，只响应空白处的点击
+                        showCityPhoto(cityName);
                     }
                 } else if (currentMap === 'world') {
                     // 世界地图点击事件处理
@@ -320,6 +371,12 @@
                 console.log('currentMap:', currentMap);
                 // 如果点击的是背景（不是地图元素），则触发切换
                 if (params.target === null || params.target === undefined) {
+                    // 先关闭照片显示
+                    var photoDisplay = document.getElementById('photo-display');
+                    if (photoDisplay) {
+                        photoDisplay.style.display = 'none';
+                    }
+                    
                     if (currentMap === 'china') {
                         showWorldMap();
                     } else if (currentMap === 'province') {
