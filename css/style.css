@@ -255,14 +255,14 @@ main {
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 70vh;
+    min-height: 650px;
+    padding: 20px 0;
 }
 
 /* 调整地图大小 */
-#china-map {
+#map-container {
     width: 100%;
-    height: 100%;
-    min-height: 600px;
+    height: 650px;
 }
 
 /* 页脚样式 */

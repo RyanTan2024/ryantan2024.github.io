@@ -8,8 +8,44 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
+
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <script src="china-map-data.js"></script>
+    <script src="maps/china.json"></script>
+    <script src="maps/world.json"></script>
+
+    <script>
+        var provinceData = {};
+        var currentProvince = null;
+        var provinceList = [
+            '北京市', '天津市', '上海市', '重庆市',
+            '河北省', '山西省', '辽宁省', '吉林省', '黑龙江省',
+            '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省',
+            '河南省', '湖北省', '湖南省', '广东省', '海南省',
+            '四川省', '贵州省', '云南省', '陕西省', '甘肃省', '青海省',
+            '台湾省',
+            '内蒙古自治区', '广西壮族自治区', '西藏自治区', '宁夏回族自治区', '新疆维吾尔自治区',
+            '香港特别行政区', '澳门特别行政区'
+        ];
+
+        function loadProvinceData(provinceName, callback) {
+            if (provinceData[provinceName]) {
+                callback(provinceData[provinceName]);
+                return;
+            }
+            
+            fetch('maps/province/' + encodeURIComponent(provinceName) + '.json')
+                .then(response => response.json())
+                .then(data => {
+                    provinceData[provinceName] = data;
+                    echarts.registerMap(provinceName, data);
+                    callback(data);
+                })
+                .catch(error => {
+                    console.error('加载省份地图失败:', provinceName, error);
+                    callback(null);
+                });
+        }
+    </script>
 </head>
 <body class="index-page">
     <header class="hero">
@@ -25,11 +61,13 @@
             </div>
         </div>
     </header>
-    
+
     <main>
-        <section id="china-map" class="map-section"></section>
+        <section class="map-section">
+            <div id="map-container"></div>
+        </section>
     </main>
-    
+
     <footer>
         <div class="container">
             <div class="footer-bottom">
@@ -37,74 +75,265 @@
             </div>
         </div>
     </footer>
-    
+
     <script>
         if (typeof chinaJson !== 'undefined') {
             echarts.registerMap('china', chinaJson);
         }
-        
-        window.addEventListener('load', function() {
-                    var chinaMapDiv = document.getElementById('china-map');
-                    
-                    var chinaMap = echarts.init(chinaMapDiv);
-                    
-                    // 渲染中国地图
-                    function renderChinaMap() {
-                        var option = {
-                            // 移除tooltip配置，去掉鼠标悬停弹窗
-                            visualMap: {
-                                show: true,
-                                min: 0,
-                                max: 1,
-                                left: 'right',
-                                top: 'bottom',
-                                text: ['已走过', '未走过'],
-                                calculable: false,
-                                inRange: {
-                                    color: ['#e0e0e0', '#f1c40f']
-                                },
-                                textStyle: {
-                                    fontSize: 12,
-                                    color: '#333'
-                                },
-                                itemWidth: 15,
-                                itemHeight: 50
+
+        if (typeof worldJson !== 'undefined') {
+            echarts.registerMap('world', worldJson);
+        }
+
+        window.addEventListener('load', function () {
+            var mapDiv = document.getElementById('map-container');
+            var chart = echarts.init(mapDiv);
+            var mapContainer = mapDiv;
+
+            var currentMap = 'china';
+
+            function getChinaOption() {
+                return {
+                    visualMap: {
+                        show: true,
+                        min: 0,
+                        max: 1,
+                        left: '95%',
+                        bottom: '5%',
+                        text: ['已走过', '未走过'],
+                        calculable: false,
+                        inRange: {
+                            color: ['#e0e0e0', '#f1c40f']
+                        },
+                        textStyle: {
+                            fontSize: 12,
+                            color: '#333'
+                        },
+                        itemWidth: 15,
+                        itemHeight: 50
+                    },
+                    series: [{
+                        name: '中国',
+                        type: 'map',
+                        map: 'china',
+                        roam: false,
+                        label: {
+                            show: false,
+                            color: '#333',
+                            fontSize: 10
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
                             },
-                            series: [{
-                                name: '中国',
-                                type: 'map',
-                                map: 'china',
-                                roam: false,
+                            itemStyle: {
+                                areaColor: '#f39c12'
+                            }
+                        },
+                        data: [
+                            { name: '山东省', value: 1, itemStyle: { areaColor: '#f1c40f' } }
+                        ]
+                    }]
+                };
+            }
+
+            function getProvinceOption(provinceName, callback) {
+                loadProvinceData(provinceName, function(data) {
+                    if (!data) {
+                        console.error('省份地图数据加载失败');
+                        return;
+                    }
+
+                    // 高亮已走过的城市
+                    var visitedCities = [];
+                    if (provinceName === '山东省') {
+                        visitedCities = [
+                            { name: '济南市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
+                            { name: '德州市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
+                            { name: '泰安市', value: 1, itemStyle: { areaColor: '#f1c40f' } }
+                        ];
+                    }
+
+                    var provinceOption = {
+                        visualMap: {
+                            show: true,
+                            min: 0,
+                            max: 1,
+                            left: '95%',
+                            bottom: '5%',
+                            text: ['已走过', '未走过'],
+                            calculable: false,
+                            inRange: {
+                                color: ['#e0e0e0', '#f1c40f']
+                            },
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#333'
+                            },
+                            itemWidth: 15,
+                            itemHeight: 50
+                        },
+                        series: [{
+                            name: provinceName,
+                            type: 'map',
+                            map: provinceName,
+                            roam: false,
+                            label: {
+                                show: false,
+                                color: '#333',
+                                fontSize: 10
+                            },
+                            emphasis: {
                                 label: {
-                                    show: false,
-                                    color: '#333',
-                                    fontSize: 10
+                                    show: true
                                 },
                                 itemStyle: {
-                                    areaColor: '#e0e0e0',
-                                    borderColor: '#ffffff'
-                                },
-                                emphasis: {
-                                    itemStyle: {
-                                        areaColor: '#f39c12'
-                                    }
-                                },
-                                data: [
-                                    {name: '山东省', value: 1, itemStyle: {areaColor: '#f1c40f'}}
-                                ]
-                            }]
-                        };
-                        
-                        chinaMap.setOption(option);
-                    }
-                    
-                    // 初始渲染中国地图
-                    renderChinaMap();
-                    
-                    window.addEventListener('resize', function() {
-                        chinaMap.resize();
-                    });
+                                    areaColor: '#f39c12'
+                                }
+                            },
+                            data: visitedCities
+                        }]
+                    };
+
+                    callback(provinceOption);
                 });
+            }
+
+            function getWorldOption() {
+                return {
+                    visualMap: {
+                        show: true,
+                        min: 0,
+                        max: 1,
+                        left: '95%',
+                        bottom: '5%',
+                        text: ['已走过', '未走过'],
+                        calculable: false,
+                        inRange: {
+                            color: ['#e0e0e0', '#f1c40f']
+                        },
+                        textStyle: {
+                            fontSize: 12,
+                            color: '#333'
+                        },
+                        itemWidth: 15,
+                        itemHeight: 50
+                    },
+                    series: [{
+                        name: '世界',
+                        type: 'map',
+                        map: 'world',
+                        roam: false,
+                        label: {
+                            show: false,
+                            color: '#333',
+                            fontSize: 8
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
+                            },
+                            itemStyle: {
+                                areaColor: '#f39c12'
+                            }
+                        },
+                        data: [
+                            { name: '中国', value: 1, itemStyle: { areaColor: '#f1c40f' } },
+                        ]
+                    }]
+                };
+            }
+
+            function renderMap(mapType, extraData) {
+                console.log('renderMap:', mapType);
+                currentMap = mapType;
+
+                if (mapType === 'china') {
+                    chart.setOption(getChinaOption(), true);
+                } else if (mapType === 'province') {
+                    getProvinceOption(extraData.provinceName, function(option) {
+                        console.log('省份地图选项:', option);
+                        chart.setOption(option, true);
+                    });
+                } else {
+                    chart.setOption(getWorldOption(), true);
+                }
+            }
+
+            function showChinaMap() {
+                console.log('切换到中国地图');
+                renderMap('china');
+                currentProvince = null;
+            }
+
+            function showProvinceMap(provinceName) {
+                console.log('切换到省份地图:', provinceName);
+                currentProvince = provinceName;
+                renderMap('province', { provinceName: provinceName });
+            }
+
+            function showWorldMap() {
+                console.log('切换到世界地图');
+                renderMap('world');
+                currentProvince = null;
+            }
+
+            // 初始渲染中国地图
+            showChinaMap();
+
+            // 监听地图点击事件
+            chart.on('click', function(params) {
+                console.log('点击事件:', params);
+                
+                if (currentMap === 'china') {
+                    if (params.componentType === 'series' && params.seriesType === 'map') {
+                        var provinceName = params.name;
+                        console.log('点击的省份:', provinceName);
+                        
+                        if (provinceList.includes(provinceName)) {
+                            showProvinceMap(provinceName);
+                        }
+                    }
+                } else if (currentMap === 'province') {
+                    // 省份地图点击事件处理
+                    if (params.componentType === 'series' && params.seriesType === 'map') {
+                        var cityName = params.name;
+                        console.log('点击的城市:', cityName);
+                        // 省份地图点击城市时不做处理，只响应空白处的点击
+                    }
+                } else if (currentMap === 'world') {
+                    // 世界地图点击事件处理
+                    if (params.componentType === 'series' && params.seriesType === 'map') {
+                        var countryName = params.name;
+                        console.log('点击的国家:', countryName);
+                        if (countryName === '中国') {
+                            showChinaMap();
+                        }
+                    }
+                }
+            });
+
+            // 监听 ECharts 的 zrender 点击事件，用于检测空白处的点击
+            chart.getZr().on('click', function(params) {
+                console.log('zrender 点击事件:', params);
+                console.log('params.target:', params.target);
+                console.log('currentMap:', currentMap);
+                // 如果点击的是背景（不是地图元素），则触发切换
+                if (params.target === null || params.target === undefined) {
+                    if (currentMap === 'china') {
+                        showWorldMap();
+                    } else if (currentMap === 'province') {
+                        showChinaMap();
+                    } else if (currentMap === 'world') {
+                        // 世界地图点击空白处不处理
+                    }
+                }
+            });
+
+            window.addEventListener('resize', function() {
+                chart.resize();
+            });
+        });
     </script>
 </body>
 </html>
