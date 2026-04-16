@@ -107,15 +107,20 @@
                     console.log('找到的脚本数量:', scripts.length);
                     scripts.forEach(script => {
                         console.log('脚本内容:', script.textContent.substring(0, 100));
-                        if (script.textContent.includes('const data =')) {
+                        if (script.textContent.includes('window.journalData =')) {
                             try {
-                                var match = script.textContent.match(/const data = (\[.*?\]);/s);
+                                // 提取 window.journalData = [...] 部分
+                                var match = script.textContent.match(/window\.journalData = (\[.*?\]);\s*}/s);
                                 if (match) {
-                                    journalData = JSON.parse(match[1]);
+                                    var jsonStr = match[1];
+                                    console.log('提取的 JSON 字符串:', jsonStr.substring(0, 100));
+                                    journalData = JSON.parse(jsonStr);
                                     console.log('相册数据加载成功:', journalData);
                                     journalData.forEach((item, index) => {
                                         console.log('item', index, ':', item, 'city:', item.city);
                                     });
+                                } else {
+                                    console.log('未找到匹配的 JSON 数据');
                                 }
                             } catch (e) {
                                 console.error('解析相册数据失败:', e);
