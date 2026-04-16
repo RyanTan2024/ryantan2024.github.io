@@ -278,13 +278,17 @@
 
             // 显示城市照片
             function showCityPhoto(cityName) {
+                console.log('显示城市照片:', cityName);
+                console.log('journalData:', journalData);
                 var photoDisplay = document.getElementById('photo-display');
                 var displayImg = document.getElementById('display-img');
                 var displayTitle = document.getElementById('display-title');
                 
                 var cityData = journalData.find(item => item.city === cityName);
+                console.log('找到的城市数据:', cityData);
                 if (cityData) {
                     var photos = cityData.photos || (cityData.photo ? [cityData.photo] : []);
+                    console.log('照片列表:', photos);
                     if (photos.length > 0) {
                         displayImg.src = photos[0];
                         displayTitle.textContent = cityData.title;

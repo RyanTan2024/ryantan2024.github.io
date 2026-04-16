@@ -95,7 +95,7 @@ body.index-page {
     font-size: 1.1rem;
     font-weight: 500;
     margin: 0;
-    letter-spacing: 2px;
+    letter-spacing: 0px;
     color: #2E004E;
     flex-shrink: 0;
 }
