@@ -113,6 +113,9 @@
                                 if (match) {
                                     journalData = JSON.parse(match[1]);
                                     console.log('相册数据加载成功:', journalData);
+                                    journalData.forEach((item, index) => {
+                                        console.log('item', index, ':', item, 'city:', item.city);
+                                    });
                                 }
                             } catch (e) {
                                 console.error('解析相册数据失败:', e);
