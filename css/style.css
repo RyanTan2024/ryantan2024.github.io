@@ -132,6 +132,10 @@ main {
     grid-column: span 3;
 }
 
+.journal-item-wide-4 {
+    grid-column: span 4;
+}
+
 .journal-item {
     background-color: #ffffff;
     border-radius: 8px;
@@ -203,10 +207,11 @@ main {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-/* 4张照片 */
+/* 4张及以上照片：统一1行4列，避免出现2*2 */
 .journal-gallery:has(.gallery-item:nth-child(4)) {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-rows: 1fr !important;
 }
 
 .journal-gallery .gallery-item {
@@ -335,6 +340,12 @@ footer {
     .journal-item-wide-3 {
         grid-column: span 3;
     }
+    
+    .journal-item-wide-4 {
+        grid-column: span 4;
+    }
+    
+
 }
 
 @media (max-width: 992px) {
@@ -351,9 +362,15 @@ footer {
         grid-column: span 3;
     }
     
+    .journal-item-wide-4 {
+        grid-column: span 3;
+    }
+    
     .journal-item {
         padding: 0.9rem;
     }
+    
+
 }
 
 @media (max-width: 768px) {
@@ -371,7 +388,8 @@ footer {
     }
     
     .journal-item-wide-2,
-    .journal-item-wide-3 {
+    .journal-item-wide-3,
+    .journal-item-wide-4 {
         grid-column: span 2;
     }
     
@@ -381,6 +399,18 @@ footer {
     
     .journal-gallery {
         min-height: 120px;
+    }
+    
+    /* 768px以下4张照片保持1行4列 */
+    .journal-gallery:has(.gallery-item:nth-child(4)) {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-rows: 1fr !important;
+        gap: 0.5rem;
+    }
+
+    .journal-gallery:has(.gallery-item:nth-child(4)) .gallery-item {
+        height: 120px;
     }
 }
 
@@ -403,7 +433,8 @@ footer {
     }
     
     .journal-item-wide-2,
-    .journal-item-wide-3 {
+    .journal-item-wide-3,
+    .journal-item-wide-4 {
         grid-column: span 2;
     }
     
@@ -413,6 +444,13 @@ footer {
     
     .journal-gallery {
         min-height: 100px;
+    }
+    
+    /* 手机上4张照片也保持1行4列 */
+    .journal-gallery:has(.gallery-item:nth-child(4)) {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-rows: 1fr !important;
     }
 }
 
