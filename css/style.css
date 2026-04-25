@@ -204,7 +204,7 @@ main {
 
 /* 3张照片 */
 .journal-gallery:has(.gallery-item:nth-child(3)):not(:has(.gallery-item:nth-child(4))) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 /* 4张及以上照片：统一1行4列，避免出现2*2 */
@@ -370,7 +370,15 @@ footer {
         padding: 0.9rem;
     }
     
+    /* 992px下4张照片使用2*2布局 */
+    .journal-gallery:has(.gallery-item:nth-child(4)) {
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 1fr 1fr !important;
+    }
 
+    .journal-gallery:has(.gallery-item:nth-child(4)) .gallery-item {
+        height: 130px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -401,11 +409,11 @@ footer {
         min-height: 120px;
     }
     
-    /* 768px以下4张照片保持1行4列 */
+    /* 768px以下4张照片使用2*2布局 */
     .journal-gallery:has(.gallery-item:nth-child(4)) {
         display: grid !important;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-        grid-template-rows: 1fr !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 1fr 1fr !important;
         gap: 0.5rem;
     }
 
@@ -475,26 +483,7 @@ footer {
 
 /* 移除左边边框条，统一整体风格 */
 
-.gallery-item {
-    position: relative;
-    overflow: hidden;
-}
 
-.gallery-item::after {
-    content: ''; 
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.02);
-    opacity: 0;
-    transition: all 0.4s ease;
-}
-
-.gallery-item:hover::after {
-    opacity: 1;
-}
 
 /* 排版优化 */
 h1, h2, h3, h4, h5, h6 {
