@@ -314,6 +314,22 @@ footer {
     letter-spacing: 1px;
 }
 
+/* ClustrMaps 地球：尺寸为 0，隐藏显示，保留统计 */
+.clstr-globe-wrap {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.clstr-globe-wrap > *:not(script) {
+    width: 0 !important;
+    height: 0 !important;
+    max-width: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+}
+
 /* 动画效果 */
 @keyframes fadeInDown {
     from {
