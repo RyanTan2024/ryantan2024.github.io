@@ -263,6 +263,389 @@
                 };
             }
 
+            var solarCenterX = 50;
+            var solarCenterY = 50;
+            var solarBodies = [
+                { name: '太阳', orbit: 0, angle: 0, size: 36, speed: 0, visited: false },
+                { name: '水星', orbit: 14, angle: 0, size: 6, speed: 0.45, visited: false },
+                { name: '金星', orbit: 20, angle: 72, size: 10, speed: 0.35, visited: false },
+                { name: '地球', orbit: 26, angle: 144, size: 11, speed: 0.28, visited: true },
+                { name: '月球', parent: '地球', orbit: 6, angle: 0, size: 5, speed: 1.8, visited: false },
+                { name: '火星', orbit: 34, angle: 216, size: 8, speed: 0.22, visited: false },
+                { name: '木星', orbit: 44, angle: 288, size: 22, speed: 0.14, visited: false },
+                { name: '土星', orbit: 54, angle: 36, size: 18, speed: 0.1, visited: false },
+                { name: '天王星', orbit: 64, angle: 108, size: 12, speed: 0.07, visited: false },
+                { name: '海王星', orbit: 72, angle: 180, size: 12, speed: 0.05, visited: false }
+            ];
+            var solarBodyAngles = {};
+            var solarAnimationId = null;
+            var solarOrbitRadii = [];
+            var solarGlowPhase = 0;
+
+            function getSolarGrid() {
+                return {
+                    left: '4%',
+                    right: '4%',
+                    top: '4%',
+                    bottom: '4%'
+                };
+            }
+
+            function getSolarAxisConfig() {
+                var chartWidth = chart.getWidth();
+                var chartHeight = chart.getHeight();
+                var gridWidth = chartWidth * 0.92;
+                var gridHeight = chartHeight * 0.92;
+                var aspect = gridWidth / gridHeight;
+                var maxOrbit = 72;
+                var padding = 6;
+                var ySpan = maxOrbit + padding;
+                var xSpan = ySpan;
+
+                if (aspect >= 1) {
+                    xSpan = ySpan * aspect;
+                } else {
+                    ySpan = xSpan / aspect;
+                }
+
+                return {
+                    xMin: solarCenterX - xSpan,
+                    xMax: solarCenterX + xSpan,
+                    yMin: solarCenterY - ySpan,
+                    yMax: solarCenterY + ySpan
+                };
+            }
+
+            function initSolarAngles() {
+                solarOrbitRadii = [];
+                solarBodies.forEach(function (body) {
+                    solarBodyAngles[body.name] = body.angle;
+                    if (body.orbit > 0 && !body.parent && solarOrbitRadii.indexOf(body.orbit) === -1) {
+                        solarOrbitRadii.push(body.orbit);
+                    }
+                });
+            }
+
+            function getSolarBodyPosition(body) {
+                if (body.name === '太阳') {
+                    return { x: solarCenterX, y: solarCenterY };
+                }
+
+                if (body.parent) {
+                    var parent = solarBodies.find(function (item) { return item.name === body.parent; });
+                    var parentPos = getSolarBodyPosition(parent);
+                    var moonRad = solarBodyAngles[body.name] * Math.PI / 180;
+                    return {
+                        x: parentPos.x + body.orbit * Math.cos(moonRad),
+                        y: parentPos.y - body.orbit * Math.sin(moonRad)
+                    };
+                }
+
+                var rad = solarBodyAngles[body.name] * Math.PI / 180;
+                return {
+                    x: solarCenterX + body.orbit * Math.cos(rad),
+                    y: solarCenterY - body.orbit * Math.sin(rad)
+                };
+            }
+
+            function buildPlanetScatterData() {
+                return solarBodies
+                    .filter(function (body) { return body.name !== '太阳'; })
+                    .map(function (body) {
+                        var pos = getSolarBodyPosition(body);
+                        return {
+                            name: body.name,
+                            value: [pos.x, pos.y, body.visited ? 1 : 0],
+                            symbolSize: body.size
+                        };
+                    });
+            }
+
+            function buildSunGlowData() {
+                var glowRings = [
+                    { base: 52, amp: 5, phase: 0, opacity: 0.2 },
+                    { base: 66, amp: 6, phase: 1.4, opacity: 0.12 },
+                    { base: 80, amp: 7, phase: 2.8, opacity: 0.06 }
+                ];
+
+                return glowRings.map(function (ring) {
+                    return {
+                        value: [solarCenterX, solarCenterY],
+                        symbolSize: ring.base + Math.sin(solarGlowPhase + ring.phase) * ring.amp,
+                        itemStyle: {
+                            color: 'rgba(255, 193, 68, ' + ring.opacity + ')',
+                            borderColor: 'rgba(255, 150, 20, ' + (ring.opacity * 1.3) + ')',
+                            borderWidth: 1
+                        }
+                    };
+                });
+            }
+
+            function buildSunCoreSeries() {
+                return {
+                    id: 'sun-core',
+                    name: '太阳',
+                    type: 'effectScatter',
+                    coordinateSystem: 'cartesian2d',
+                    z: 12,
+                    rippleEffect: {
+                        brushType: 'stroke',
+                        scale: 3,
+                        period: 4,
+                        number: 2
+                    },
+                    symbolSize: 36,
+                    itemStyle: {
+                        color: {
+                            type: 'radial',
+                            x: 0.5,
+                            y: 0.5,
+                            r: 0.5,
+                            colorStops: [
+                                { offset: 0, color: '#FFF8DC' },
+                                { offset: 0.55, color: '#FFC94A' },
+                                { offset: 1, color: '#FF8C00' }
+                            ]
+                        },
+                        shadowBlur: 28,
+                        shadowColor: 'rgba(255, 140, 0, 0.65)'
+                    },
+                    data: [{
+                        name: '太阳',
+                        value: [solarCenterX, solarCenterY]
+                    }],
+                    label: {
+                        show: true,
+                        formatter: '太阳',
+                        position: 'bottom',
+                        color: '#333',
+                        fontSize: 11
+                    }
+                };
+            }
+
+            function buildSunGlowSeries() {
+                return {
+                    id: 'sun-glow',
+                    type: 'scatter',
+                    coordinateSystem: 'cartesian2d',
+                    z: 4,
+                    silent: true,
+                    animation: false,
+                    animationDurationUpdate: 0,
+                    data: buildSunGlowData()
+                };
+            }
+
+            function buildSolarOrbitRing(orbitRadius) {
+                var points = [];
+                for (var i = 0; i <= 360; i += 4) {
+                    var rad = i * Math.PI / 180;
+                    points.push([
+                        solarCenterX + orbitRadius * Math.cos(rad),
+                        solarCenterY - orbitRadius * Math.sin(rad)
+                    ]);
+                }
+                return {
+                    type: 'line',
+                    coordinateSystem: 'cartesian2d',
+                    silent: true,
+                    symbol: 'none',
+                    animation: false,
+                    lineStyle: {
+                        color: 'rgba(0, 0, 0, 0.08)',
+                        width: 1
+                    },
+                    data: points
+                };
+            }
+
+            function buildMoonOrbitRing() {
+                var earth = solarBodies.find(function (item) { return item.name === '地球'; });
+                var moon = solarBodies.find(function (item) { return item.name === '月球'; });
+                var earthPos = getSolarBodyPosition(earth);
+                var points = [];
+
+                for (var i = 0; i <= 360; i += 4) {
+                    var rad = i * Math.PI / 180;
+                    points.push([
+                        earthPos.x + moon.orbit * Math.cos(rad),
+                        earthPos.y - moon.orbit * Math.sin(rad)
+                    ]);
+                }
+
+                return {
+                    id: 'moon-orbit',
+                    type: 'line',
+                    coordinateSystem: 'cartesian2d',
+                    silent: true,
+                    symbol: 'none',
+                    animation: false,
+                    lineStyle: {
+                        color: 'rgba(0, 0, 0, 0.12)',
+                        width: 1,
+                        type: 'dashed'
+                    },
+                    data: points
+                };
+            }
+
+            function getSolarOrbitRings() {
+                return solarOrbitRadii.map(buildSolarOrbitRing).concat([buildMoonOrbitRing()]);
+            }
+
+            function stopSolarAnimation() {
+                if (solarAnimationId) {
+                    cancelAnimationFrame(solarAnimationId);
+                    solarAnimationId = null;
+                }
+            }
+
+            function updateSolarChart() {
+                var axis = getSolarAxisConfig();
+                chart.setOption({
+                    animation: false,
+                    animationDurationUpdate: 0,
+                    xAxis: {
+                        min: axis.xMin,
+                        max: axis.xMax
+                    },
+                    yAxis: {
+                        min: axis.yMin,
+                        max: axis.yMax
+                    },
+                    series: [
+                        {
+                            id: 'sun-glow',
+                            animation: false,
+                            animationDurationUpdate: 0,
+                            data: buildSunGlowData()
+                        },
+                        {
+                            id: 'moon-orbit',
+                            animation: false,
+                            animationDurationUpdate: 0,
+                            data: buildMoonOrbitRing().data
+                        },
+                        {
+                            id: 'solar-bodies',
+                            animation: false,
+                            animationDurationUpdate: 0,
+                            data: buildPlanetScatterData()
+                        }
+                    ]
+                }, false);
+            }
+
+            function startSolarAnimation() {
+                stopSolarAnimation();
+                var lastTime = performance.now();
+
+                function tick(now) {
+                    if (currentMap !== 'solar') {
+                        stopSolarAnimation();
+                        return;
+                    }
+
+                    var delta = now - lastTime;
+                    lastTime = now;
+
+                    solarBodies.forEach(function (body) {
+                        if (body.speed > 0) {
+                            solarBodyAngles[body.name] += body.speed * delta / 16;
+                        }
+                    });
+
+                    solarGlowPhase += delta / 400;
+                    updateSolarChart();
+                    solarAnimationId = requestAnimationFrame(tick);
+                }
+
+                solarAnimationId = requestAnimationFrame(tick);
+            }
+
+            function getSolarOption() {
+                var axis = getSolarAxisConfig();
+
+                return {
+                    backgroundColor: '#ffffff',
+                    animation: false,
+                    animationDuration: 0,
+                    animationDurationUpdate: 0,
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}'
+                    },
+                    grid: getSolarGrid(),
+                    xAxis: {
+                        type: 'value',
+                        show: false,
+                        min: axis.xMin,
+                        max: axis.xMax,
+                        scale: false
+                    },
+                    yAxis: {
+                        type: 'value',
+                        show: false,
+                        min: axis.yMin,
+                        max: axis.yMax,
+                        scale: false
+                    },
+                    visualMap: {
+                        show: true,
+                        min: 0,
+                        max: 1,
+                        dimension: 2,
+                        right: '2%',
+                        bottom: '10%',
+                        text: ['已走过', '未走过'],
+                        calculable: false,
+                        inRange: {
+                            color: ['#e0e0e0', '#f1c40f']
+                        },
+                        textStyle: {
+                            fontSize: 12,
+                            color: '#333'
+                        },
+                        itemWidth: 15,
+                        itemHeight: 50
+                    },
+                    series: getSolarOrbitRings().concat([
+                        buildSunGlowSeries(),
+                        {
+                        id: 'solar-bodies',
+                        name: '太阳系',
+                        type: 'scatter',
+                        z: 8,
+                        animation: false,
+                        animationDuration: 0,
+                        animationDurationUpdate: 0,
+                        data: buildPlanetScatterData(),
+                        label: {
+                            show: true,
+                            formatter: '{b}',
+                            position: 'bottom',
+                            color: '#333',
+                            fontSize: 11
+                        },
+                        emphasis: {
+                            scale: true,
+                            label: {
+                                show: true,
+                                color: '#333',
+                                fontWeight: 'bold'
+                            },
+                            itemStyle: {
+                                borderColor: '#f39c12',
+                                borderWidth: 2
+                            }
+                        }
+                    },
+                    buildSunCoreSeries()
+                    ])
+                };
+            }
+
             // 显示城市照片
             function showCityPhoto(cityName) {
                 console.log('显示城市照片:', cityName);
@@ -288,6 +671,11 @@
 
             function renderMap(mapType, extraData) {
                 console.log('renderMap:', mapType);
+
+                if (mapType !== 'solar') {
+                    stopSolarAnimation();
+                }
+
                 currentMap = mapType;
 
                 if (mapType === 'china') {
@@ -297,8 +685,16 @@
                         console.log('省份地图选项:', option);
                         chart.setOption(option, true);
                     });
-                } else {
+                } else if (mapType === 'world') {
                     chart.setOption(getWorldOption(), true);
+                } else if (mapType === 'solar') {
+                    initSolarAngles();
+                    solarGlowPhase = 0;
+                    chart.clear();
+                    chart.setOption(getSolarOption(), { notMerge: true, lazyUpdate: false });
+                    chart.resize();
+                    updateSolarChart();
+                    startSolarAnimation();
                 }
             }
 
@@ -317,6 +713,12 @@
             function showWorldMap() {
                 console.log('切换到世界地图');
                 renderMap('world');
+                currentProvince = null;
+            }
+
+            function showSolarMap() {
+                console.log('切换到太阳系');
+                renderMap('solar');
                 currentProvince = null;
             }
 
@@ -352,6 +754,11 @@
                             showChinaMap();
                         }
                     }
+                } else if (currentMap === 'solar') {
+                    if (params.componentType === 'series' &&
+                        (params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
+                        console.log('点击的天体:', params.name);
+                    }
                 }
             });
 
@@ -373,13 +780,32 @@
                     } else if (currentMap === 'province') {
                         showChinaMap();
                     } else if (currentMap === 'world') {
-                        // 世界地图点击空白处不处理
+                        showSolarMap();
+                    } else if (currentMap === 'solar') {
+                        showWorldMap();
                     }
                 }
             });
 
             window.addEventListener('resize', function() {
                 chart.resize();
+                if (currentMap === 'solar') {
+                    var axis = getSolarAxisConfig();
+                    chart.setOption({
+                        grid: getSolarGrid(),
+                        animation: false,
+                        animationDurationUpdate: 0,
+                        xAxis: {
+                            min: axis.xMin,
+                            max: axis.xMax
+                        },
+                        yAxis: {
+                            min: axis.yMin,
+                            max: axis.yMax
+                        }
+                    }, false);
+                    updateSolarChart();
+                }
             });
         });
     </script>
