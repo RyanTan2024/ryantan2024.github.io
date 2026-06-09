@@ -27,9 +27,19 @@ body {
     flex-direction: column;
 }
 
-/* 为相册页面添加滚动条 */
+/* 相册页：隐藏滚动条，保留滚动能力 */
+html.index-page,
 body.index-page {
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: clip;
+    width: 100%;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+body.index-page {
+    min-height: 100vh;
+    height: auto;
 }
 
 /* 容器样式 */
@@ -37,6 +47,9 @@ body.index-page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 10px;
+    width: 100%;
+    min-width: 0;
+    overflow-x: clip;
 }
 
 /* 头部样式 */
@@ -45,7 +58,16 @@ body.index-page {
     color: var(--primary-color);
     padding: 10px 0;
     position: relative;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(0,0,0, 0.05);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.hero-title-wrap {
+    overflow: hidden;
+    height: 1.6em;
+    display: flex;
+    align-items: flex-end;
 }
 
 .hero-content {
@@ -91,13 +113,16 @@ body.index-page {
     color: inherit;
 }
 
-.hero h1 {
+.hero h1,
+.hero-title {
     font-size: 1.1rem;
     font-weight: 500;
     margin: 0;
     letter-spacing: 0px;
     color: #2E004E;
     flex-shrink: 0;
+    transition: none !important;
+    transform-origin: center bottom;
 }
 
 /* 部分标题样式 */
@@ -109,18 +134,24 @@ main {
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-x: clip;
+    width: 100%;
+    min-width: 0;
 }
 
 /* 成长记录部分样式 */
 .journal-section {
     padding: 30px 0;
     background-color: var(--background-color);
+    overflow-x: clip;
+    width: 100%;
 }
 
 .journal-container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0.8rem;
+    width: 100%;
 }
 
 /* 宽度过渡 */
@@ -141,7 +172,7 @@ main {
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -218,7 +249,7 @@ main {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
-    transition: all 0.4s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     background-color: #f9f9f9;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     height: 150px;
@@ -233,18 +264,11 @@ main {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: all 0.6s ease;
-    opacity: 0;
-    transform: scale(1.05);
+    display: block;
 }
 
 .journal-gallery .gallery-item img.loaded {
     opacity: 1;
-    transform: scale(1);
-}
-
-.journal-gallery .gallery-item:hover img {
-    transform: scale(1.08);
 }
 
 /* 移除图片悬停时的文字覆盖层 */
@@ -315,20 +339,25 @@ footer {
     letter-spacing: 1px;
 }
 
-/* ClustrMaps 地球：尺寸为 0，隐藏显示，保留统计 */
-.clstr-globe-wrap {
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    margin: 0 auto;
-}
-
-.clstr-globe-wrap > *:not(script) {
+/* ClustrMaps / 第三方统计：强制隐藏，避免撑开页面 */
+#clstr_maps,
+#clustrmaps-widget,
+.clustrmaps,
+[id*="clstr"],
+iframe[src*="clustrmaps"],
+iframe[src*="baidu"] {
+    position: fixed !important;
+    left: -9999px !important;
+    top: -9999px !important;
     width: 0 !important;
     height: 0 !important;
     max-width: 0 !important;
     max-height: 0 !important;
     overflow: hidden !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    border: 0 !important;
 }
 
 /* 动画效果 */
@@ -346,7 +375,7 @@ footer {
 /* 响应式设计 */
 @media (max-width: 1200px) {
     .journal-container {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 0.7rem;
     }
     
@@ -367,7 +396,7 @@ footer {
 
 @media (max-width: 992px) {
     .journal-container {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.6rem;
     }
     
@@ -408,7 +437,7 @@ footer {
     }
     
     .journal-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.5rem;
     }
     
@@ -453,7 +482,7 @@ footer {
     }
     
     .journal-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.4rem;
     }
     
@@ -479,16 +508,16 @@ footer {
     }
 }
 
-/* 滚动条样式 */
-::-webkit-scrollbar {
+/* 滚动条样式（相册页除外） */
+html:not(.index-page)::-webkit-scrollbar {
     width: 6px;
 }
 
-::-webkit-scrollbar-track {
+html:not(.index-page)::-webkit-scrollbar-track {
     background: var(--light-color);
 }
 
-::-webkit-scrollbar-thumb {
+html:not(.index-page)::-webkit-scrollbar-thumb {
     background: var(--accent-color);
 }
 
@@ -513,16 +542,6 @@ p {
     font-weight: 300;
     line-height: 1.6;
     letter-spacing: 0.5px;
-}
-
-/* 加载效果 */
-img {
-    transition: all 0.6s ease;
-}
-
-/* 全局过渡效果 */
-* {
-    transition: all 0.3s ease;
 }
 
 /* 照片放大模态框 */
@@ -602,7 +621,7 @@ img {
 }
 
 .journal-gallery .gallery-item:hover {
-    transform: scale(1.02);
+    transform: translateY(-2px);
 }
 
 .journal-gallery .gallery-item img {
@@ -623,4 +642,21 @@ img {
     padding: 0;
     list-style: none;
     white-space: nowrap;
+}
+
+/* 相册页彻底隐藏所有滚动条 */
+html.index-page::-webkit-scrollbar,
+html.index-page *::-webkit-scrollbar,
+body.index-page::-webkit-scrollbar,
+body.index-page *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+html.index-page *,
+body.index-page * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
 }

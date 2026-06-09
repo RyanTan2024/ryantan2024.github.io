@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="index-page">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,15 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/hero-title.js" defer></script>
 </head>
 <body class="index-page">
     <header class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>谭燃 (Ryan TAN)</h1>
+                <div class="hero-title-wrap">
+                    <h1 class="hero-title">谭燃 (Ryan TAN)</h1>
+                </div>
                 <nav class="nav">
                     <ul>
                         <li><a href="index.html" class="active">相册</a></li>
@@ -88,34 +91,16 @@
                 });
         }
         
-        // 渐进式加载日记
+        // 一次性加载全部日记，避免网格反复重排导致页面左右抖动
         function progressiveLoad(items) {
             const container = document.getElementById('journal-container');
             container.innerHTML = '';
-            
-            let currentIndex = 0;
-            const batchSize = 1; // 每次加载1个事件
-            
-            function loadNextBatch() {
-                if (currentIndex >= items.length) {
-                    return;
-                }
-                
-                const endIndex = Math.min(currentIndex + batchSize, items.length);
-                const batchItems = items.slice(currentIndex, endIndex);
-                
-                batchItems.forEach(item => {
-                    renderJournalItem(item);
-                });
-                
-                currentIndex = endIndex;
-                
-                // 延迟加载下一批，给浏览器时间渲染
-                setTimeout(loadNextBatch, 300);
-            }
-            
-            // 开始加载第一批
-            loadNextBatch();
+
+            items.forEach(item => {
+                renderJournalItem(item);
+            });
+
+            lazyLoadImages();
         }
         
         // 渲染单个日记项目
@@ -161,7 +146,7 @@
                 const photoPath = item.photo;
                 photosHTML += `
                     <div class="gallery-item" onclick="openPhotoModal('${photoPath}', '${item.title}')">
-                        <img data-src="${photoPath}" alt="${item.title}" class="lazy-load">
+                        <img data-src="${photoPath}" alt="${item.title}" class="lazy-load" decoding="async">
                     </div>
                 `;
                 photosHTML += '</div>';
@@ -173,7 +158,7 @@
                     const photoSrc = photo.src || photo;
                     photosHTML += `
                         <div class="gallery-item" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
-                            <img data-src="${photoSrc}" alt="${item.title}" class="lazy-load">
+                            <img data-src="${photoSrc}" alt="${item.title}" class="lazy-load" decoding="async">
                         </div>
                     `;
                 });
@@ -182,36 +167,26 @@
             
             journalItem.innerHTML = dateHTML + contentHTML + photosHTML;
             container.appendChild(journalItem);
-            
-            // 触发懒加载
-            setTimeout(() => {
-                lazyLoadImages();
-            }, 100);
         }
         
         // 懒加载图片
         function lazyLoadImages() {
             const lazyImages = document.querySelectorAll('.lazy-load');
-            
+
             lazyImages.forEach(img => {
                 const rect = img.getBoundingClientRect();
                 const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                
-                // 当图片进入视口时加载
-                if (rect.top <= windowHeight && rect.bottom >= 0) {
-                    console.log('Loading image:', img.dataset.src);
+
+                if (rect.top <= windowHeight + 200 && rect.bottom >= -200) {
                     img.src = img.dataset.src;
                     img.classList.remove('lazy-load');
                     img.classList.add('loaded');
                 }
             });
         }
-        
-        // 滚动时触发懒加载
-        window.addEventListener('scroll', lazyLoadImages);
-        
-        
-        
+
+        window.addEventListener('scroll', lazyLoadImages, { passive: true });
+
         // 全局照片放大函数
         function openPhotoModal(src, alt) {
             const modal = document.getElementById('photo-modal');
@@ -244,25 +219,38 @@
             });
         }
         
-        // 页面加载时加载数据
-        window.addEventListener('load', function() {
+        // DOM 就绪后立即加载相册，不等待第三方统计脚本
+        document.addEventListener('DOMContentLoaded', function() {
             loadJournalData();
-            // 设置照片放大功能
             setupPhotoModal();
         });
-    </script>
-    <div class="clstr-globe-wrap">
-        <!-- 百度统计 -->
-        <script>
+
+        // 浏览器空闲时再加载统计脚本，并放入隐藏容器
+        function loadThirdPartyScripts() {
             var _hmt = _hmt || [];
             (function() {
-              var hm = document.createElement("script");
-              hm.src = "https://hm.baidu.com/hm.js?55e1f638993b24277edb605f248391f2";
-              var s = document.getElementsByTagName("script")[0];
-              s.parentNode.insertBefore(hm, s);
+                var hm = document.createElement('script');
+                hm.src = 'https://hm.baidu.com/hm.js?55e1f638993b24277edb605f248391f2';
+                document.head.appendChild(hm);
             })();
-        </script>
-        <script type="text/javascript" id="clstr_globe" src="//clustrmaps.com/globe.js?d=36XM6SUwMq187cRMN1Rp0rZwVquvjcxOtq7lv2iecm4"></script>
-    </div>
+
+            var sandbox = document.createElement('div');
+            sandbox.setAttribute('aria-hidden', 'true');
+            sandbox.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none;';
+            var clstr = document.createElement('script');
+            clstr.id = 'clstr_globe';
+            clstr.src = '//clustrmaps.com/globe.js?d=36XM6SUwMq187cRMN1Rp0rZwVquvjcxOtq7lv2iecm4';
+            sandbox.appendChild(clstr);
+            document.body.appendChild(sandbox);
+        }
+
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadThirdPartyScripts, { timeout: 8000 });
+        } else {
+            window.addEventListener('load', function() {
+                setTimeout(loadThirdPartyScripts, 5000);
+            });
+        }
+    </script>
 </body>
 </html>
