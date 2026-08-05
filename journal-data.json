@@ -1,5 +1,21 @@
 [
     {
+        "date": "2026-08-02",
+        "title": "我在日照木育森林",
+        "photos": [
+            "photos/20260802.jpeg",
+            "photos/20260802-1.jpeg"
+        ]
+    },{
+        "date": "2026-08-01",
+        "title": "我在日照海边",
+        "photos": [
+            "photos/20260801.JPG",
+            "photos/20260801-1.JPG",
+            "photos/20260801-2.JPG",
+            "photos/20260801-3.JPG"
+        ]
+    },{
         "date": "2026-07-04",
         "title": "第一次吃肯德基",
         "photos": [
