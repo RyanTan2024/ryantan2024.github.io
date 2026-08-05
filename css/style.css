@@ -339,6 +339,15 @@ footer {
     letter-spacing: 1px;
 }
 
+.visitor-counter {
+    margin-top: 8px;
+    line-height: 1;
+}
+
+.visitor-counter a {
+    display: none;
+}
+
 /* ClustrMaps / 第三方统计：强制隐藏，避免撑开页面 */
 #clstr_maps,
 #clustrmaps-widget,
