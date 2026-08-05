@@ -230,32 +230,6 @@
             setupPhotoModal();
         });
 
-        // 浏览器空闲时再加载统计脚本，并放入隐藏容器
-        function loadThirdPartyScripts() {
-            var _hmt = _hmt || [];
-            (function() {
-                var hm = document.createElement('script');
-                hm.src = 'https://hm.baidu.com/hm.js?55e1f638993b24277edb605f248391f2';
-                document.head.appendChild(hm);
-            })();
-
-            var sandbox = document.createElement('div');
-            sandbox.setAttribute('aria-hidden', 'true');
-            sandbox.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none;';
-            var clstr = document.createElement('script');
-            clstr.id = 'clstr_globe';
-            clstr.src = '//clustrmaps.com/globe.js?d=36XM6SUwMq187cRMN1Rp0rZwVquvjcxOtq7lv2iecm4';
-            sandbox.appendChild(clstr);
-            document.body.appendChild(sandbox);
-        }
-
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadThirdPartyScripts, { timeout: 8000 });
-        } else {
-            window.addEventListener('load', function() {
-                setTimeout(loadThirdPartyScripts, 5000);
-            });
-        }
     </script>
 </body>
 </html>
