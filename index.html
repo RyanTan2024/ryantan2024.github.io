@@ -11,6 +11,10 @@
     <script src="js/hero-title.js" defer></script>
 </head>
 <body class="index-page">
+    <div id="bg-blur">
+        <div class="bg-layer" id="bg-layer-a"></div>
+        <div class="bg-layer" id="bg-layer-b"></div>
+    </div>
     <header class="hero">
         <div class="container">
             <div class="hero-content">
@@ -42,11 +46,6 @@
         <div class="container">
             <div class="footer-bottom">
                 <p>&copy; 谭燃 (Ryan Tan)</p>
-                <div class="visitor-counter">
-                    <a href="http://www.freevisitorcounters.com">Counter</a>
-                    <script type="text/javascript" src="https://www.freevisitorcounters.com/auth.php?id=a510c7b65ad04f9aba05eb0d0e9e715927cb611d"></script>
-                    <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1612741/t/2"></script>
-                </div>
             </div>
         </div>
     </footer>
@@ -62,10 +61,12 @@
         // 平滑滚动
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const target = this.getAttribute('href');
+                if (!target || target === '#') return;
+                const el = document.querySelector(target);
+                if (!el) return;
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                el.scrollIntoView({ behavior: 'smooth' });
             });
         });
         
@@ -106,8 +107,21 @@
             });
 
             lazyLoadImages();
+            if (window.scrollRevealObserver) {
+                window.scrollRevealObserver.observeItems(container);
+            }
         }
         
+        // HTML 转义，防止标题/路径中的特殊字符破坏属性
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         // 渲染单个日记项目
         function renderJournalItem(item) {
             const container = document.getElementById('journal-container');
@@ -139,7 +153,7 @@
             // 内容 - 使用title字段
             const contentHTML = `
                 <div class="journal-content">
-                    <p>${item.title}</p>
+                    <p>${escapeHtml(item.title)}</p>
                 </div>
             `;
             
@@ -150,8 +164,8 @@
                 // 尝试多种图片路径格式
                 const photoPath = item.photo;
                 photosHTML += `
-                    <div class="gallery-item" onclick="openPhotoModal('${photoPath}', '${item.title}')">
-                        <img data-src="${photoPath}" alt="${item.title}" class="lazy-load" decoding="async">
+                    <div class="gallery-item" data-src="${escapeHtml(photoPath)}" data-alt="${escapeHtml(item.title)}" onclick="openPhotoModal(this.dataset.src, this.dataset.alt)">
+                        <img data-src="${escapeHtml(photoPath)}" alt="${escapeHtml(item.title)}" class="lazy-load" decoding="async">
                     </div>
                 `;
                 photosHTML += '</div>';
@@ -162,8 +176,8 @@
                 item.photos.forEach(photo => {
                     const photoSrc = photo.src || photo;
                     photosHTML += `
-                        <div class="gallery-item" onclick="openPhotoModal('${photoSrc}', '${item.title}')">
-                            <img data-src="${photoSrc}" alt="${item.title}" class="lazy-load" decoding="async">
+                        <div class="gallery-item" data-src="${escapeHtml(photoSrc)}" data-alt="${escapeHtml(item.title)}" onclick="openPhotoModal(this.dataset.src, this.dataset.alt)">
+                            <img data-src="${escapeHtml(photoSrc)}" alt="${escapeHtml(item.title)}" class="lazy-load" decoding="async">
                         </div>
                     `;
                 });
@@ -192,6 +206,38 @@
 
         window.addEventListener('scroll', lazyLoadImages, { passive: true });
 
+        // 滚动时照片框从底部滑入
+        function setupScrollReveal() {
+            if (!('IntersectionObserver' in window)) {
+                // 不支持时直接显示所有卡片
+                document.getElementById('journal-container')
+                    .querySelectorAll('.journal-item')
+                    .forEach(function (el) { el.classList.add('visible'); });
+                return;
+            }
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -10% 0px'
+            });
+
+            window.scrollRevealObserver = {
+                observeItems: function (container) {
+                    if (!container) return;
+                    container.querySelectorAll('.journal-item:not(.visible)').forEach(function (item) {
+                        observer.observe(item);
+                    });
+                }
+            };
+        }
+
         // 全局照片放大函数
         function openPhotoModal(src, alt) {
             const modal = document.getElementById('photo-modal');
@@ -202,6 +248,48 @@
             modalImg.alt = alt;
         }
         
+        // 鼠标悬停照片时，页面背景虚化为该照片（双层交叉淡入）
+        function setupBackgroundBlur() {
+            const container = document.getElementById('journal-container');
+            const layerA = document.getElementById('bg-layer-a');
+            const layerB = document.getElementById('bg-layer-b');
+            if (!container || !layerA || !layerB) return;
+
+            let activeLayer = layerA;
+            let inactiveLayer = layerB;
+            let currentSrc = null;
+
+            container.addEventListener('mouseover', function (e) {
+                const item = e.target.closest('.gallery-item');
+                if (!item) return;
+                const img = item.querySelector('img');
+                if (!img) return;
+                const src = img.src || img.dataset.src;
+                if (!src || src === currentSrc) return;
+                currentSrc = src;
+
+                // 在非活动层加载新图并淡入，原活动层淡出，形成交叉淡入
+                inactiveLayer.style.backgroundImage = 'url("' + src + '")';
+                inactiveLayer.classList.add('bg-active');
+                activeLayer.classList.remove('bg-active');
+
+                // 交换活动层
+                const tmp = activeLayer;
+                activeLayer = inactiveLayer;
+                inactiveLayer = tmp;
+            });
+
+            container.addEventListener('mouseout', function (e) {
+                const item = e.target.closest('.gallery-item');
+                if (!item) return;
+                const related = e.relatedTarget;
+                if (!related || !item.contains(related)) {
+                    activeLayer.classList.remove('bg-active');
+                    currentSrc = null;
+                }
+            });
+        }
+
         // 照片放大功能
         function setupPhotoModal() {
             const modal = document.getElementById('photo-modal');
@@ -226,8 +314,10 @@
         
         // DOM 就绪后立即加载相册，不等待第三方统计脚本
         document.addEventListener('DOMContentLoaded', function() {
+            setupScrollReveal();
             loadJournalData();
             setupPhotoModal();
+            setupBackgroundBlur();
         });
 
     </script>

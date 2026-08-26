@@ -17,6 +17,7 @@
     <script>
         var provinceData = {};
         var currentProvince = null;
+        var journalData = [];
         var provinceList = [
             '北京市', '天津市', '上海市', '重庆市',
             '河北省', '山西省', '辽宁省', '吉林省', '黑龙江省',
@@ -653,17 +654,18 @@
 
             // 显示城市照片
             function showCityPhoto(cityName) {
-                console.log('显示城市照片:', cityName);
-                console.log('journalData:', journalData);
                 var photoDisplay = document.getElementById('photo-display');
                 var displayImg = document.getElementById('display-img');
                 var displayTitle = document.getElementById('display-title');
-                
+
+                if (!journalData || !journalData.length) {
+                    if (photoDisplay) photoDisplay.style.display = 'none';
+                    return;
+                }
+
                 var cityData = journalData.find(item => item.city === cityName);
-                console.log('找到的城市数据:', cityData);
                 if (cityData) {
                     var photos = cityData.photos || (cityData.photo ? [cityData.photo] : []);
-                    console.log('照片列表:', photos);
                     if (photos.length > 0) {
                         displayImg.src = photos[0];
                         displayTitle.textContent = cityData.title;
