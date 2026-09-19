@@ -1,5 +1,17 @@
 [
     {
+        "date": "2026-09-19",
+        "title": "我在秦皇岛",
+        "city": "秦皇岛市",
+        "photos": [
+            "photos/20260919.JPG",
+            "photos/20260919-1.JPG",
+            "photos/20260919-2.JPG",
+            "photos/20260919-3.JPG",
+            "photos/20260919-4.JPG",
+            "photos/20260919-5.JPG"
+        ]
+    },{
         "date": "2026-08-02",
         "title": "我在日照木育森林",
         "photos": [

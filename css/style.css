@@ -167,6 +167,10 @@ main {
     grid-column: span 4;
 }
 
+.journal-item-wide-6 {
+    grid-column: span 6;
+}
+
 .journal-item {
     background-color: #ffffff;
     border-radius: 8px;
@@ -248,10 +252,17 @@ main {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* 4张及以上照片：统一1行4列，避免出现2*2 */
-.journal-gallery:has(.gallery-item:nth-child(4)) {
+/* 4张照片：1行4列 */
+.journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) {
     display: grid !important;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-rows: 1fr !important;
+}
+
+/* 6张照片：宽屏下一行显示 */
+.journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
     grid-template-rows: 1fr !important;
 }
 
@@ -380,6 +391,10 @@ footer {
     .journal-item-wide-4 {
         grid-column: span 4;
     }
+
+    .journal-item-wide-6 {
+        grid-column: span 4;
+    }
     
 
 }
@@ -401,18 +416,28 @@ footer {
     .journal-item-wide-4 {
         grid-column: span 3;
     }
+
+    .journal-item-wide-6 {
+        grid-column: span 3;
+    }
     
     .journal-item {
         padding: 0.9rem;
     }
     
     /* 992px下4张照片使用2*2布局 */
-    .journal-gallery:has(.gallery-item:nth-child(4)) {
+    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) {
         grid-template-columns: 1fr 1fr !important;
         grid-template-rows: 1fr 1fr !important;
     }
 
-    .journal-gallery:has(.gallery-item:nth-child(4)) .gallery-item {
+    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        grid-template-rows: 1fr 1fr !important;
+    }
+
+    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) .gallery-item,
+    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) .gallery-item {
         height: 130px;
     }
 }
@@ -433,7 +458,8 @@ footer {
     
     .journal-item-wide-2,
     .journal-item-wide-3,
-    .journal-item-wide-4 {
+    .journal-item-wide-4,
+    .journal-item-wide-6 {
         grid-column: span 2;
     }
     
@@ -446,14 +472,22 @@ footer {
     }
     
     /* 768px以下4张照片使用2*2布局 */
-    .journal-gallery:has(.gallery-item:nth-child(4)) {
+    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         grid-template-rows: 1fr 1fr !important;
         gap: 0.5rem;
     }
 
-    .journal-gallery:has(.gallery-item:nth-child(4)) .gallery-item {
+    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 1fr 1fr 1fr !important;
+        gap: 0.5rem;
+    }
+
+    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) .gallery-item,
+    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) .gallery-item {
         height: 120px;
     }
 }
@@ -478,7 +512,8 @@ footer {
     
     .journal-item-wide-2,
     .journal-item-wide-3,
-    .journal-item-wide-4 {
+    .journal-item-wide-4,
+    .journal-item-wide-6 {
         grid-column: span 2;
     }
     
@@ -490,11 +525,17 @@ footer {
         min-height: 100px;
     }
     
-    /* 手机上4张照片也保持1行4列 */
-    .journal-gallery:has(.gallery-item:nth-child(4)) {
+    /* 手机上4张照片保持1行4列 */
+    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) {
         display: grid !important;
         grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
         grid-template-rows: 1fr !important;
+    }
+
+    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 1fr 1fr 1fr !important;
     }
 }
 

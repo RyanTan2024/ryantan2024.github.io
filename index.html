@@ -129,7 +129,9 @@
             let itemClass = 'journal-item';
             
             // 根据照片数量设置不同的类名
-            if (item.photos && item.photos.length === 3) {
+            if (item.photos && item.photos.length === 6) {
+                itemClass += ' journal-item-wide-6';
+            } else if (item.photos && item.photos.length === 3) {
                 itemClass += ' journal-item-wide-3';
             } else if (item.photos && item.photos.length === 2) {
                 itemClass += ' journal-item-wide-2';

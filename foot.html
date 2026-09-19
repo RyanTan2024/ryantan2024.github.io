@@ -99,6 +99,34 @@
             var mapContainer = mapDiv;
 
             var currentMap = 'china';
+
+            // 已走过城市配置：新增足迹时在对应省份里加城市名即可
+            var visitedCityMap = {
+                '山东省': ['济南市', '德州市', '泰安市', '济宁市', '日照市'],
+                '河北省': ['秦皇岛市']
+            };
+
+            function buildVisitedCityData(provinceName, geoData) {
+                var featureNames = {};
+                ((geoData && geoData.features) || []).forEach(function (f) {
+                    if (f.properties && f.properties.name) {
+                        featureNames[f.properties.name] = true;
+                    }
+                });
+
+                var names = (visitedCityMap[provinceName] || []).slice();
+                if (journalData && journalData.length) {
+                    journalData.forEach(function (item) {
+                        if (item.city && featureNames[item.city] && names.indexOf(item.city) === -1) {
+                            names.push(item.city);
+                        }
+                    });
+                }
+
+                return names.map(function (name) {
+                    return { name: name, value: 1, itemStyle: { areaColor: '#f1c40f' } };
+                });
+            }
             
             // 从 JSON 文件加载数据
             fetch('journal-data.json')
@@ -153,9 +181,9 @@
                                 areaColor: '#f39c12'
                             }
                         },
-                        data: [
-                            { name: '山东省', value: 1, itemStyle: { areaColor: '#f1c40f' } }
-                        ]
+                        data: Object.keys(visitedCityMap).map(function (name) {
+                            return { name: name, value: 1, itemStyle: { areaColor: '#f1c40f' } };
+                        })
                     }]
                 };
             }
@@ -168,16 +196,7 @@
                     }
 
                     // 高亮已走过的城市
-                    var visitedCities = [];
-                    if (provinceName === '山东省') {
-                        visitedCities = [
-                            { name: '济南市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
-                            { name: '德州市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
-                            { name: '泰安市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
-                            { name: '济宁市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
-                            { name: '日照市', value: 1, itemStyle: { areaColor: '#f1c40f' } },
-                        ];
-                    }
+                    var visitedCities = buildVisitedCityData(provinceName, data);
 
                     var provinceOption = {
                         visualMap: {
