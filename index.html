@@ -11,10 +11,6 @@
     <script src="js/hero-title.js" defer></script>
 </head>
 <body class="index-page">
-    <div id="bg-blur">
-        <div class="bg-layer" id="bg-layer-a"></div>
-        <div class="bg-layer" id="bg-layer-b"></div>
-    </div>
     <header class="hero">
         <div class="container">
             <div class="hero-content">
@@ -58,28 +54,13 @@
     </div>
     
     <script>
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const target = this.getAttribute('href');
-                if (!target || target === '#') return;
-                const el = document.querySelector(target);
-                if (!el) return;
-                e.preventDefault();
-                el.scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-        
         // 加载日记数据
         function loadJournalData() {
-            console.log('开始加载日记数据...');
-            
             // 从 JSON 文件加载数据
             fetch('journal-data.json')
                 .then(response => response.json())
                 .then(data => {
                     window.journalData = data;
-                    console.log('数据加载成功:', window.journalData);
                     
                     // 按日期降序排序，最新的在前面
                     window.journalData.sort((a, b) => {
@@ -142,9 +123,11 @@
             journalItem.className = itemClass;
             
             // 日期 - 显示为MM/YYYY格式
-            const date = new Date(item.date);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
+            // 直接拆分字符串取年月，避免 new Date("YYYY-MM-DD") 按 UTC 解析，
+            // 导致海外时区（UTC 以西）把每月 1 日的记录显示成上一个月
+            const dateParts = String(item.date).split(/[\/-]/);
+            const year = dateParts[0];
+            const month = String(dateParts[1]).padStart(2, '0');
             const formattedDate = `${month}/${year}`;
             const dateHTML = `
                 <div class="journal-header">
@@ -244,72 +227,31 @@
         function openPhotoModal(src, alt) {
             const modal = document.getElementById('photo-modal');
             const modalImg = document.getElementById('modal-img');
-            console.log('Opening photo modal:', src);
-            modal.classList.add('show');
             modalImg.src = src;
             modalImg.alt = alt;
+            modal.classList.add('show');
+            document.documentElement.classList.add('modal-open');
         }
-        
-        // 鼠标悬停照片时，页面背景虚化为该照片（双层交叉淡入）
-        function setupBackgroundBlur() {
-            const container = document.getElementById('journal-container');
-            const layerA = document.getElementById('bg-layer-a');
-            const layerB = document.getElementById('bg-layer-b');
-            if (!container || !layerA || !layerB) return;
 
-            let activeLayer = layerA;
-            let inactiveLayer = layerB;
-            let currentSrc = null;
-
-            container.addEventListener('mouseover', function (e) {
-                const item = e.target.closest('.gallery-item');
-                if (!item) return;
-                const img = item.querySelector('img');
-                if (!img) return;
-                const src = img.src || img.dataset.src;
-                if (!src || src === currentSrc) return;
-                currentSrc = src;
-
-                // 在非活动层加载新图并淡入，原活动层淡出，形成交叉淡入
-                inactiveLayer.style.backgroundImage = 'url("' + src + '")';
-                inactiveLayer.classList.add('bg-active');
-                activeLayer.classList.remove('bg-active');
-
-                // 交换活动层
-                const tmp = activeLayer;
-                activeLayer = inactiveLayer;
-                inactiveLayer = tmp;
-            });
-
-            container.addEventListener('mouseout', function (e) {
-                const item = e.target.closest('.gallery-item');
-                if (!item) return;
-                const related = e.relatedTarget;
-                if (!related || !item.contains(related)) {
-                    activeLayer.classList.remove('bg-active');
-                    currentSrc = null;
-                }
-            });
+        // 关闭照片放大
+        function closePhotoModal() {
+            document.getElementById('photo-modal').classList.remove('show');
+            document.documentElement.classList.remove('modal-open');
         }
 
         // 照片放大功能
         function setupPhotoModal() {
             const modal = document.getElementById('photo-modal');
-            
-            console.log('Photo modal setup started');
-            console.log('Modal element:', modal);
-            
+
             // 点击模态框任意位置关闭
             modal.addEventListener('click', function() {
-                console.log('Modal clicked');
-                modal.classList.remove('show');
+                closePhotoModal();
             });
-            
+
             // 按ESC键关闭
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && modal.classList.contains('show')) {
-                    console.log('Escape key pressed');
-                    modal.classList.remove('show');
+                    closePhotoModal();
                 }
             });
         }
@@ -319,7 +261,6 @@
             setupScrollReveal();
             loadJournalData();
             setupPhotoModal();
-            setupBackgroundBlur();
         });
 
     </script>

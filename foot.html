@@ -132,12 +132,7 @@
             fetch('journal-data.json')
                 .then(response => response.json())
                 .then(data => {
-                    window.journalData = data;
                     journalData = data;
-                    console.log('相册数据加载成功:', journalData);
-                    journalData.forEach((item, index) => {
-                        console.log('item', index, ':', item, 'city:', item.city);
-                    });
                 })
                 .catch(error => {
                     console.error('加载相册数据失败:', error);
@@ -696,8 +691,6 @@
             }
 
             function renderMap(mapType, extraData) {
-                console.log('renderMap:', mapType);
-
                 if (mapType !== 'solar') {
                     stopSolarAnimation();
                 }
@@ -708,7 +701,6 @@
                     chart.setOption(getChinaOption(), true);
                 } else if (mapType === 'province') {
                     getProvinceOption(extraData.provinceName, function(option) {
-                        console.log('省份地图选项:', option);
                         chart.setOption(option, true);
                     });
                 } else if (mapType === 'world') {
@@ -725,25 +717,21 @@
             }
 
             function showChinaMap() {
-                console.log('切换到中国地图');
                 renderMap('china');
                 currentProvince = null;
             }
 
             function showProvinceMap(provinceName) {
-                console.log('切换到省份地图:', provinceName);
                 currentProvince = provinceName;
                 renderMap('province', { provinceName: provinceName });
             }
 
             function showWorldMap() {
-                console.log('切换到世界地图');
                 renderMap('world');
                 currentProvince = null;
             }
 
             function showSolarMap() {
-                console.log('切换到太阳系');
                 renderMap('solar');
                 currentProvince = null;
             }
@@ -753,13 +741,10 @@
 
             // 监听地图点击事件
             chart.on('click', function(params) {
-                console.log('点击事件:', params);
-                
                 if (currentMap === 'china') {
                     if (params.componentType === 'series' && params.seriesType === 'map') {
                         var provinceName = params.name;
-                        console.log('点击的省份:', provinceName);
-                        
+
                         if (provinceList.includes(provinceName)) {
                             showProvinceMap(provinceName);
                         }
@@ -767,32 +752,20 @@
                 } else if (currentMap === 'province') {
                     // 省份地图点击事件处理
                     if (params.componentType === 'series' && params.seriesType === 'map') {
-                        var cityName = params.name;
-                        console.log('点击的城市:', cityName);
-                        showCityPhoto(cityName);
+                        showCityPhoto(params.name);
                     }
                 } else if (currentMap === 'world') {
                     // 世界地图点击事件处理
                     if (params.componentType === 'series' && params.seriesType === 'map') {
-                        var countryName = params.name;
-                        console.log('点击的国家:', countryName);
-                        if (countryName === '中国') {
+                        if (params.name === '中国') {
                             showChinaMap();
                         }
-                    }
-                } else if (currentMap === 'solar') {
-                    if (params.componentType === 'series' &&
-                        (params.seriesType === 'scatter' || params.seriesType === 'effectScatter')) {
-                        console.log('点击的天体:', params.name);
                     }
                 }
             });
 
             // 监听 ECharts 的 zrender 点击事件，用于检测空白处的点击
             chart.getZr().on('click', function(params) {
-                console.log('zrender 点击事件:', params);
-                console.log('params.target:', params.target);
-                console.log('currentMap:', currentMap);
                 // 如果点击的是背景（不是地图元素），则触发切换
                 if (params.target === null || params.target === undefined) {
                     // 先关闭照片显示

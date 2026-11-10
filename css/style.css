@@ -107,12 +107,6 @@ body.index-page {
     font-weight: 600;
 }
 
-/* 标题链接样式 */
-.title-link {
-    text-decoration: none;
-    color: inherit;
-}
-
 .hero h1,
 .hero-title {
     font-size: 1.1rem;
@@ -292,11 +286,6 @@ main {
     opacity: 1;
 }
 
-/* 移除图片悬停时的文字覆盖层 */
-.journal-gallery .gallery-overlay {
-    display: none;
-}
-
 /* 地图部分样式 */
 .map-section {
     margin-top: 0;
@@ -359,18 +348,6 @@ footer {
     opacity: 0.6;
     font-size: 0.8rem;
     letter-spacing: 1px;
-}
-
-/* 动画效果 */
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* 响应式设计 */
@@ -595,6 +572,12 @@ p {
     justify-content: center;
 }
 
+/* 模态框打开时锁定背景滚动 */
+html.modal-open,
+html.modal-open body {
+    overflow: hidden !important;
+}
+
 .modal-content {
     position: relative;
     padding: 0;
@@ -612,24 +595,6 @@ p {
     max-height: 80vh;
     height: auto;
     object-fit: contain;
-}
-
-.close {
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 /* 动画效果 */
@@ -690,36 +655,4 @@ html.index-page *,
 body.index-page * {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
-}
-
-/* 照片背景虚化层 */
-#bg-blur {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.bg-layer {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-    filter: blur(24px) saturate(1.1);
-    transform: scale(1.08);
-}
-
-.bg-layer.bg-active {
-    opacity: 0.75;
-}
-
-/* 内容层级提升，确保在虚化层之上 */
-body.index-page .hero,
-body.index-page main,
-body.index-page footer {
-    position: relative;
-    z-index: 1;
 }
