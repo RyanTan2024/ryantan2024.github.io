@@ -412,11 +412,6 @@ footer {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         grid-template-rows: 1fr 1fr !important;
     }
-
-    /* 窄屏下所有照片统一高度 */
-    .journal-gallery .gallery-item {
-        height: 120px;
-    }
 }
 
 @media (max-width: 768px) {
