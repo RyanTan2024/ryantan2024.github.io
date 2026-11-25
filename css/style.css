@@ -413,9 +413,9 @@ footer {
         grid-template-rows: 1fr 1fr !important;
     }
 
-    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) .gallery-item,
-    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) .gallery-item {
-        height: 130px;
+    /* 窄屏下所有照片统一高度 */
+    .journal-gallery .gallery-item {
+        height: 120px;
     }
 }
 
@@ -462,11 +462,6 @@ footer {
         grid-template-rows: 1fr 1fr 1fr !important;
         gap: 0.5rem;
     }
-
-    .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) .gallery-item,
-    .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) .gallery-item {
-        height: 120px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -502,11 +497,11 @@ footer {
         min-height: 100px;
     }
     
-    /* 手机上4张照片保持1行4列 */
+    /* 手机上4张照片使用2*2布局 */
     .journal-gallery:has(.gallery-item:nth-child(4)):not(:has(.gallery-item:nth-child(5))) {
         display: grid !important;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-        grid-template-rows: 1fr !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 1fr 1fr !important;
     }
 
     .journal-gallery:has(.gallery-item:nth-child(6)):not(:has(.gallery-item:nth-child(7))) {
